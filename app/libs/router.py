@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
-__author__ = 'ghost'
-
-
 # # The route helpers were originally written by
 # # Jeremy Kelley (http://github.com/nod).
 
