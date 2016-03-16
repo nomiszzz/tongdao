@@ -7,6 +7,7 @@ import tornado.gen
 import tornado.httpclient
 from app.helper import BaseRequestHandler
 from app.libs import router
+from app.models.auth import User
 from settings import config, logger
 
 
@@ -25,7 +26,7 @@ class SigninHandler(BaseRequestHandler):
                 authorize_api=authorize_api,
                 appid=appid,
                 redirect_uri=redirect_uri))
-        logger.info(u'微信授权地址 {}'.format(authorize_url))
+        logger.info(u'weixin authorize url {}'.format(authorize_url))
         return self.redirect(authorize_url)
 
 @router.Route('/auth/callback')
@@ -67,17 +68,41 @@ class CallbackHandler(BaseRequestHandler):
         nickname = data['nickname'].encode('utf-8')
         avatar = '{}64'.format(data['headimgurl'][:-1])
 
-        # 写入数据库
+        user = User.findone(openid=openid)
+        if user:
+            # 更新旧用户
+            user.nickname = nickname
+            user.avatar = avatar
+            try:
+                row = user.update()
+            except Exception, e:
+                logger.error('update user error {}'.format(e))
+                self.redirect('/')
+                return
+        else:
+            # 写入新用户
+            user = User(nickname=nickname, avatar=avatar, openid=openid)
+            try:
+                row = user.insert()
+                logger.info('insert user success {}'.format(row))
+            except Exception, e:
+                logger.error('insert user error {}'.format(e))
+                self.redirect('/')
+                return
 
-        # 设置 cookie
+        # 存储session
+        self.session['nickname'] = nickname.decode('utf-8')
+        self.session['uid'] = row
+        self.session['openid'] = openid
+        self.session.save()
+
         self.redirect('/')
-
 
     def _handler_resp(self, body):
         try:
             data = json.loads(body)
         except Exception, e:
-            logger.error(u'微信返回error {}'.format(e))
+            logger.error('weixin response error {}'.format(e))
             return False, None
 
         if data.has_key('errcode'):

@@ -37,7 +37,7 @@ def create_session_manager():
         'password': config.REDISDB['password'],
         'db': config.REDISDB['db']
     }
-    return SessionManager("session_secret", redis_conf, 30 * 24 * 60 * 60)
+    return SessionManager("session_secret", redis_conf, 1 * 2 * 60 * 60)
 
 def create_redis():
     """ 创建 redis 连接 """

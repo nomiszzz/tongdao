@@ -17,7 +17,8 @@ class Application(tornado.web.Application):
 
     def __init__(self):
         super(Application, self).__init__(
-                **config.SETTINGS
+            handlers=router.Route.get_routes(),
+             **config.SETTINGS
         )
         logger.info('init the db conn {}'.format(id(db)))
         tornado.ioloop.PeriodicCallback(self.ping_db, 60 * 1000).start()

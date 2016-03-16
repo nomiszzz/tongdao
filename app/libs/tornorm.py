@@ -6,7 +6,7 @@ __author__ = 'ghost'
 import logging
 import contextlib
 import datetime
-from settings import dbconn as conn
+from settings import db as conn
 from settings import config
 
 logger = logging.getLogger('orm')

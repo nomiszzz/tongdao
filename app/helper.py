@@ -3,6 +3,7 @@
 
 __author__ = 'ghost'
 
+import functools
 import json
 import tornado.web
 from app.libs import session
@@ -11,6 +12,13 @@ from app.libs import session
 class BaseRequestHandler(tornado.web.RequestHandler):
     def initialize(self):
         self.session = session.Session(self.application.session_manager, self)
+
+    def get_current_user(self):
+        super(BaseRequestHandler, self).get_current_user()
+        nickname = self.session.get('nickname')
+        if not nickname:
+            return None
+        return nickname
 
     def jsonify(self, data):
         self.finish(json.dumps(data))
