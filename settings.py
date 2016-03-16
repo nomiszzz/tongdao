@@ -8,7 +8,10 @@ import tornado.util
 from tornado.options import define, options
 
 define('env', default='dev')
+define('port', default=9999)
 options.parse_command_line()
+
+port = options.port
 
 if options.env == 'dev':
     config = tornado.util.import_object('config.dev')
@@ -25,4 +28,4 @@ def create_log():
 
 
 logger = create_log()
-logger.info('logger db conn {}')
+logger.info('DB conn {}')
