@@ -4,6 +4,7 @@
 __author__ = 'ghost'
 
 import logging
+import redis
 import tornado.util
 from tornado.options import define, options
 from app.libs.session import SessionManager
@@ -38,6 +39,17 @@ def create_session_manager():
     }
     return SessionManager("session_secret", redis_conf, 30 * 24 * 60 * 60)
 
+def create_redis():
+    """ 创建 redis 连接 """
+    connection_pool = redis.ConnectionPool(
+        host=config.REDISDB['host'],
+        port=config.REDISDB['port'],
+        db=config.REDISDB['db'],
+        password=config.REDISDB['password']
+    )
+
+    return redis.Redis(connection_pool=connection_pool)
+
 def create_mysqldb():
     """ 创建 mysql 连接 """
     mdb = Connection(
@@ -51,8 +63,10 @@ def create_mysqldb():
 
 
 logger = create_log()
-logger.info('DB conn {}')
+session_manager = create_session_manager()
 
-dbconn = create_mysqldb()
-logger.info('DB conn {}'.format(id(dbconn)))
+db = create_mysqldb()
+logger.info('DB conn {}'.format(id(db)))
 
+rdb = create_redis()
+logger.info('Redis DB conn {}'.format(id(rdb)))

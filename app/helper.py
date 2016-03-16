@@ -5,9 +5,13 @@ __author__ = 'ghost'
 
 import json
 import tornado.web
+from app.libs import session
 
 
 class BaseRequestHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        self.session = session.Session(self.application.session_manager, self)
+
     def jsonify(self, data):
         self.finish(json.dumps(data))
 
