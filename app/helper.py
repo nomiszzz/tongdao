@@ -16,10 +16,10 @@ class BaseRequestHandler(tornado.web.RequestHandler):
 
     def get_current_user(self):
         super(BaseRequestHandler, self).get_current_user()
-        nickname = self.session.get('nickname')
-        if not nickname:
+        uid = self.session.get('uid')
+        if not uid:
             return None
-        return nickname
+        return uid
 
     def jsonify(self, data):
         self.finish(json.dumps(data))

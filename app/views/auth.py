@@ -65,7 +65,7 @@ class CallbackHandler(BaseRequestHandler):
             return
 
         openid = data['openid']
-        nickname = data['nickname'].encode('utf-8')
+        nickname = data['nickname'].encode('unicode-escape')
         avatar = '{}64'.format(data['headimgurl'][:-1])
 
         user = User.findone(openid=openid)
@@ -93,7 +93,6 @@ class CallbackHandler(BaseRequestHandler):
                 return
 
         # 存储session
-        self.session['nickname'] = nickname.decode('utf-8')
         self.session['uid'] = row
         self.session['openid'] = openid
         self.session.save()

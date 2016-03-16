@@ -28,3 +28,21 @@ class LogoutHandler(BaseRequestHandler):
         self.session.pop('openid')
         self.session.save()
         self.finish('logout success')
+
+
+@router.Route('/emoji')
+class EmojiHandle(BaseRequestHandler):
+
+    def get(self, *args, **kwargs):
+
+        from settings import  db
+
+
+        s = u'中国人\U0001f604'.encode('unicode-escape')
+        print s
+        db.execute("update user set nickname=%s WHERE id=2", s)
+
+        user = db.get("SELECT * FROM user where id=2")
+        r =  user['nickname'].decode('unicode-escape')
+
+        self.write(r)

@@ -15,7 +15,7 @@ class IndexHandler(BaseRequestHandler):
         """ 活动首页
             判断是否领取了宝贝,尚未领取显示活动页面,否则跳转个人页
         """
-        uid = self.session['uid']
+        uid = self.current_user
         if has_pet_cache(uid):
             return self.redirect('/home')
         else:

@@ -15,7 +15,7 @@ class HomeHandler(BaseTemplateRequestHandler):
 
     @tornado.web.authenticated
     def get(self, *args, **kwargs):
-        uid = self.session['uid']
+        uid = self.current_user
         # 如果尚未领取,重定向领取列表
         if not has_pet_cache(uid) and not Pet.findone(uid=uid):
             return self.redirect('/pets')
@@ -48,7 +48,7 @@ class BabiesHandler(BaseTemplateRequestHandler):
     @tornado.web.authenticated
     def get(self, ptype):
 
-        uid = self.session['uid']
+        uid = self.current_user
         # 如果领取了,重定向个人页
         if has_pet_cache(uid) or Pet.findone(uid=uid):
             return self.redirect('/home')
