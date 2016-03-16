@@ -3,5 +3,5 @@
 
 
 __all__ = [
-    'index', 'home', 'auth'
+    'index', 'home', 'auth', 'hack'
 ]

@@ -77,6 +77,7 @@ class CallbackHandler(BaseRequestHandler):
                 row = user.update()
             except Exception, e:
                 logger.error('update user error {}'.format(e))
+                self.set_status(500)
                 self.redirect('/')
                 return
         else:
@@ -87,6 +88,7 @@ class CallbackHandler(BaseRequestHandler):
                 logger.info('insert user success {}'.format(row))
             except Exception, e:
                 logger.error('insert user error {}'.format(e))
+                self.set_status(500)
                 self.redirect('/')
                 return
 

@@ -3,7 +3,7 @@
 
 __author__ = 'ghost'
 
-import functools
+
 import json
 import tornado.web
 from app.libs import session
@@ -22,6 +22,15 @@ class BaseRequestHandler(tornado.web.RequestHandler):
 
     def jsonify(self, data):
         self.finish(json.dumps(data))
+
+
+class BaseTemplateRequestHandler(BaseRequestHandler):
+    def get_template_namespace(self):
+        namespace = super(BaseTemplateRequestHandler, self).get_template_namespace()
+        namespace.update(
+                session=self.session
+        )
+        return namespace
 
 
 class BaseApiRequestHandler(BaseRequestHandler):
