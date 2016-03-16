@@ -7,6 +7,7 @@ __author__ = 'ghost'
 import json
 import tornado.web
 from app.libs import session
+from settings import rdb
 
 
 class BaseRequestHandler(tornado.web.RequestHandler):
@@ -45,3 +46,20 @@ class BaseApiRequestHandler(BaseRequestHandler):
         self.set_header('Content-type', 'application/json')
         self.set_header('Cache-Control', 'no-store')
         self.set_header('Pragma', 'no-store')
+
+
+def has_pet_cache(uid):
+    """ 缓存是否领养了宝贝
+    """
+    key = 'uid:{}:getpet'.format(uid)
+    if rdb.get(key):
+        return True
+    return False
+
+
+def set_pet_cache(uid):
+    """ 设置领养了宝贝的缓存
+    """
+    key = 'uid:{}:getpet'.format(uid)
+    rdb.set(key, '1')
+    rdb.expire(key, 60*60)

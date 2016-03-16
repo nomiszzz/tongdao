@@ -16,7 +16,7 @@ class SigninHandler(BaseRequestHandler):
     """微信授权"""
 
     def get(self, *args, **kwargs):
-        callback = self.get_argument('callback')
+
         appid = config.WEIXIN['appid']
         authorize_api = config.WEIXIN['authorize_api']
         redirect_uri = config.WEIXIN['redirect_uri']
@@ -50,7 +50,7 @@ class CallbackHandler(BaseRequestHandler):
         status, data = self._handler_resp(resp.body)
         if not status:
             # 微信授权失败
-            self.redirect('/')
+            self.redirect('/error')
             return
 
         user_info_api = config.WEIXIN['user_info_api']
@@ -61,7 +61,7 @@ class CallbackHandler(BaseRequestHandler):
         logger.info(u'user info response {}'.format(resp))
         status, data = self._handler_resp(resp.body)
         if not status:
-            self.redirect('/')
+            self.redirect('/error')
             return
 
         openid = data['openid']
@@ -78,7 +78,7 @@ class CallbackHandler(BaseRequestHandler):
             except Exception, e:
                 logger.error('update user error {}'.format(e))
                 self.set_status(500)
-                self.redirect('/')
+                self.redirect('/error')
                 return
         else:
             # 写入新用户
@@ -89,7 +89,7 @@ class CallbackHandler(BaseRequestHandler):
             except Exception, e:
                 logger.error('insert user error {}'.format(e))
                 self.set_status(500)
-                self.redirect('/')
+                self.redirect('/error')
                 return
 
         # 存储session
