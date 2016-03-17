@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block title %}奖品{% end %}
+{% block style %}<link rel="stylesheet" href="http://7xkf6a.com2.z0.glb.qiniucdn.com/css/index-ddea3887ce.css">{% end %}
+{% block main %}
+<div class="eventGround" >
+    <div class="contain">
+        <img src="/static/images/pic32.jpg">
+        <a class="back" href=""><img src="/static/images/back.png"></a>
+    </div>
+    <div class="contain" id="change">
+        <div class="imgBox">
+            <img src="/static/images/pic33.jpg">
+            <img src="/static/images/pic33.jpg">
+            <img src="/static/images/pic33.jpg">
+        </div>
+    </div>
+
+    <img src="/static/images/pic34.jpg">
+    <div class="contain">
+        <img src="/static/images/pic35.jpg">
+        <ul class="prolist">
+            {% for ad in awards %}
+                <li data-code="{{ ad['code'] }}" data-provide="{{ ad['provide'] }}">
+                    <div class="proDetial">
+                        {{ ad['name'] }}
+                        <span class="cost"><em>288</em>点</span>
+                    </div>
+                    <img src="/static/images/{{ ad['image'] }}">
+                </li>
+            {% end %}
+        </ul>
+    </div>
+</div>
+<div class="window">
+    <div class="shadow"></div>
+    <div class="textBox">
+        <div>
+            <span class="name"></span>
+            奖品说明<br>
+            这里是说明这里是说明这里是说明这里是说明这里是说明这里是说明
+            <p class="score">点击兑换后会扣除xxx点数哦！</p>
+            <span class="cost"><img src="/static/images/cost.png"></span>
+        </div>
+        <div style="display: none;">
+            <p class="code">兑换码：666666</p>
+            <span class="close cost">ok</span>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        var score = 0;
+        var code = '';
+        var provide = '';
+        $(".prolist li").bind("click", function(){
+//            score = parseInt($(this).find('em').text());
+//            code = $(this).attr('data-code');
+//            provide = $(this).attr('data-provide');
+//            $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
+//            $(".textBox .name").text('活动奖品有' + provide +  '商家提供');
+//            $(".textBox p").text('兑换码：' + code);
+            $(".window").show();
+        });
+
+        $(".textBox .cost").bind("click",function(){
+            $(this).parent().hide();
+            $(this).parent().next().show();
+        });
+        $(".close").bind("click",function(){
+            $(".window").hide();
+        });
+
+        /*轮播*/
+        var width = window.screen.width;
+
+        var height = width*0.4;
+
+        $("#change").height(height);
+
+        $("#change").width(width);
+
+        $(".imgBox").width(width*3);
+
+        $(".imgBox").height(height);
+        $(".imgBox img").width(width);
+
+        var flag = 0;
+        var timer;
+        tt();
+        function tt() {
+            var _args = arguments;
+            timer = setTimeout(function () {
+
+                imgScroll(1);
+                _args.callee();
+            },2000);
+        }
+
+
+        function imgScroll(dir) {
+            if(flag<2 && dir == 1){
+                var left = parseInt($(".imgBox").css("left"));
+                left = (left - width)+"px";
+                $(".imgBox").animate({left:left},500);
+                flag++;
+            }
+            else if (flag > 0 && dir == -1 ) {
+                var left = parseInt($(".imgBox").css("left"));
+                left = (left + width)+"px";
+                $(".imgBox").animate({left:left},500);
+                flag--;
+            }
+            else{
+                $(".imgBox").animate({left:"0px"},500);
+                flag=0;
+            }
+        }
+
+        var preX;
+        $(".imgBox").on("touchstart", function(e) {
+            var currX = e.originalEvent.changedTouches[0].clientX;
+
+            preX = currX;
+
+        })
+
+        $(".imgBox").on("touchend", function(e) {
+            var currX = e.originalEvent.changedTouches[0].clientX;
+            if (currX - preX > 0) {
+                console.log("right");
+                imgScroll(-1);
+            }  else {
+                console.log("left");
+                imgScroll(1);
+            }
+            clearTimeout(timer);
+            tt();
+        })
+
+    });
+</script>
+{% end %}

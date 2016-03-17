@@ -47,7 +47,7 @@
     </ul>
     <div class="contain">
         <img src="/static/images/pic31.jpg">
-        <p class="scores"><span>{{ user_join_pet_info['score'] }}</span><a href=""></a></p>
+        <p class="scores"><span>{{ user_join_pet_info['score'] }}</span><a href="/award"></a></p>
 
     </div>
 </div>
@@ -72,7 +72,6 @@
                     var scores =parseInt($(".scores span").html());
                     scores +=num;
                     $(".scores span").html(scores);
-
                     break;
                 case 1:
 
@@ -94,7 +93,7 @@
             $(this).unbind("click");
         });
     });
-    //添加cookie
+   /* //添加cookie
     function addCookie(name,value,expiresHours){
         var cookieString=name+"="+escape(value);
         //判断是否设置过期时间
@@ -114,6 +113,6 @@
         if(arr[0]==name)return arr[1];
         }
         return "";
-    }
+    }*/
 </script>
 {% end %}

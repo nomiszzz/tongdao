@@ -5,6 +5,7 @@ __author__ = 'ghost'
 
 
 import json
+import random
 import tornado.web
 from app.libs import session
 from settings import rdb
@@ -63,3 +64,8 @@ def set_pet_cache(uid):
     key = 'uid:{}:getpet'.format(uid)
     rdb.set(key, '1')
     rdb.expire(key, 60*60)
+
+
+def gen_random_code(length=6):
+    chars='0123456789'
+    return ''.join([random.choice(chars) for i in range(length)])

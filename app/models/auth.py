@@ -3,7 +3,7 @@
 
 __author__ = 'ghost'
 
-from app.libs.tornorm import Model, Integer, String
+from app.libs.tornorm import Model, Integer, String, Time
 
 
 class User(Model):
@@ -14,6 +14,7 @@ class User(Model):
     openid = String(length=60, nullable=True)
     nickname = String(length=20, nullable=True)
     avatar = String(length=150, nullable=True)
+    created_at = Time(length=20)
 
     def __repr__(self):
         return '<User {}>'.format(self.nickname)

@@ -6,7 +6,8 @@ __author__ = 'ghost'
 import tornado.web
 from app.helper import BaseTemplateRequestHandler, has_pet_cache, set_pet_cache, BaseApiRequestHandler
 from app.libs import router
-from app.models.home import Pet
+from app.helper import gen_random_code
+from app.models.home import Pet, Award
 from settings import logger
 
 
@@ -68,13 +69,23 @@ class BabiesHandler(BaseTemplateRequestHandler):
             return self.redirect('/pets')
         self.redirect('/home')
 
-@router.Route('/api/v1/keep')
-class KeepHandler(BaseApiRequestHandler):
+@router.Route('/awards')
+class AwardsHandler(BaseTemplateRequestHandler):
 
-    @tornado.web.authenticated
-    def get(self, type):
-        type_ = self.get_argument('type_', None)
-        if not type_:
-            return self.render('/error')
+    # @tornado.web.authenticated
+    def get(self, *args, **kwargs):
+        awards = Award.findall()
+        for ad in awards:
+            setattr(ad, 'code', gen_random_code())
+        self.render('awards.html', awards=awards)
+
+# @router.Route('/api/v1/keep')
+# class KeepHandler(BaseApiRequestHandler):
+#
+#     @tornado.web.authenticated
+#     def get(self, type):
+#         type_ = self.get_argument('type_', None)
+#         if not type_:
+#             return self.render('/error')
 
 
