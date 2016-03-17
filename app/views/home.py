@@ -6,9 +6,9 @@ __author__ = 'ghost'
 import tornado.web
 from app.helper import BaseTemplateRequestHandler, has_pet_cache, set_pet_cache, BaseApiRequestHandler
 from app.libs import router
-from app.helper import gen_random_code
+from app.helper import gen_random_code, get_to_tomorrow
 from app.models.home import Pet, Award
-from settings import logger
+from settings import logger, rdb
 
 
 @router.Route('/home')
@@ -33,7 +33,7 @@ class HomeHandler(BaseTemplateRequestHandler):
 
 
 @router.Route('/pets')
-class BabiesHandler(BaseTemplateRequestHandler):
+class PetsHandler(BaseTemplateRequestHandler):
     """
     领养列表
     """
@@ -44,7 +44,7 @@ class BabiesHandler(BaseTemplateRequestHandler):
 
 
 @router.Route('/pet/(?P<ptype>\w+)')
-class BabiesHandler(BaseTemplateRequestHandler):
+class PetHandler(BaseTemplateRequestHandler):
     """
     领养接口,领养成功重定向个人页
     """
@@ -79,13 +79,61 @@ class AwardsHandler(BaseTemplateRequestHandler):
             setattr(ad, 'code', gen_random_code())
         self.render('awards.html', awards=awards)
 
-# @router.Route('/api/v1/keep')
-# class KeepHandler(BaseApiRequestHandler):
-#
-#     @tornado.web.authenticated
-#     def get(self, type):
-#         type_ = self.get_argument('type_', None)
-#         if not type_:
-#             return self.render('/error')
+@router.Route('/api/v1/keep')
+class KeepHandler(BaseApiRequestHandler):
+    """ 喂养接口,
+    :type_ : eat 投食
+             wash 洗澡
+             game 有戏
+
+             每天仅能进行一次
+    """
+
+    # @tornado.web.authenticated
+    def get(self):
+        uid = self.current_user
+        uid = 1
+        type_ = self.get_argument('type', None)
+        if not type_:
+            self.set_status(400)
+            result = dict(code=40011, msg=u'缺少type参数')
+            return self.jsonify(result)
+
+        keep_info = self.keep_map(type_)
+
+        key = "uid:{}:keep:{}".format(uid, type_)
+        times = rdb.incr(key)
+        if times == 1:
+            rdb.expire(key, get_to_tomorrow())
+        else:
+            logger.warning('have try times {}'.format(times))
+            result = dict(code=40010, msg=u'每天只能{}一次哦!'.format(keep_info['name']))
+            return self.jsonify(result)
+
+        try:
+            row = Pet.keep(uid=uid, score=keep_info['score'])
+            logger.info('keep pet {}'.format(row))
+        except Exception, e:
+            self.set_status(500)
+            logger.error('keep pet error {}'.format(e))
+            result = dict(code=40012, msg=u'更新服务器错误')
+            return self.jsonify(result)
+
+        self.set_status(201)
+        self.jsonify({})
+
+    @staticmethod
+    def keep_map(type_):
+
+        maps = {
+            'eat': {'name': u'投食', 'score': 2},
+            'wash': {'name': u'洗澡', 'score': 3},
+            'game': {'name': u'游戏', 'score': 5}
+        }
+        return maps[type_]
+
+
+
+
 
 

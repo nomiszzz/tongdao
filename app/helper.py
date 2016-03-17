@@ -6,6 +6,7 @@ __author__ = 'ghost'
 
 import json
 import random
+import datetime
 import tornado.web
 from app.libs import session
 from settings import rdb
@@ -69,3 +70,8 @@ def set_pet_cache(uid):
 def gen_random_code(length=6):
     chars='0123456789'
     return ''.join([random.choice(chars) for i in range(length)])
+
+def get_to_tomorrow():
+    now = datetime.datetime.now()
+    tomorrow = datetime.datetime(now.year, now.month, now.day + 1)
+    return (tomorrow - now).seconds

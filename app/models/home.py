@@ -24,6 +24,15 @@ class Pet(Model):
                            "FROM user u JOIN pet p ON u.id=p.uid "
                            "WHERE u.id=%s", uid)
 
+    @classmethod
+    def keep(cls, uid, score):
+        return cls.raw_update("UPDATE pet SET score=score + %s WHERE uid=%s", score, uid)
+        # if score == 2:
+        #     return cls.raw_update("UPDATE pet SET score=score + 2 WHERE uid=%s", uid)
+        # elif score == 3:
+        #     return cls.raw_update("UPDATE pet SET score=score + 3 WHERE uid=%s", uid)
+        # else:
+        #     return cls.raw_update("UPDATE pet SET score=score + 5 WHERE uid=%s", uid)
 
 class Award(Model):
     __table__ = 'award'

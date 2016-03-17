@@ -23,7 +23,7 @@
                 <li data-code="{{ ad['code'] }}" data-provide="{{ ad['provide'] }}">
                     <div class="proDetial">
                         {{ ad['name'] }}
-                        <span class="cost"><em>288</em>点</span>
+                        <span class="cost"><em>{{ ad['price'] }}</em>点</span>
                     </div>
                     <img src="/static/images/{{ ad['image'] }}">
                 </li>
@@ -53,12 +53,12 @@
         var code = '';
         var provide = '';
         $(".prolist li").bind("click", function(){
-//            score = parseInt($(this).find('em').text());
-//            code = $(this).attr('data-code');
-//            provide = $(this).attr('data-provide');
-//            $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
-//            $(".textBox .name").text('活动奖品有' + provide +  '商家提供');
-//            $(".textBox p").text('兑换码：' + code);
+            score = parseInt($(this).find('em').text());
+            code = $(this).attr('data-code');
+            provide = $(this).attr('data-provide');
+            $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
+            $(".textBox .name").text('活动奖品有' + provide +  '商家提供');
+            $(".textBox p").text('兑换码：' + code);
             $(".window").show();
         });
 
