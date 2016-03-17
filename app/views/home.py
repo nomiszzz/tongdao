@@ -13,9 +13,10 @@ from settings import logger
 @router.Route('/home')
 class HomeHandler(BaseTemplateRequestHandler):
 
-    @tornado.web.authenticated
+    # @tornado.web.authenticated
     def get(self, *args, **kwargs):
         uid = self.current_user
+        uid = 1
         # 如果尚未领取,重定向领取列表
         if not has_pet_cache(uid) and not Pet.findone(uid=uid):
             return self.redirect('/pets')
@@ -23,10 +24,11 @@ class HomeHandler(BaseTemplateRequestHandler):
         # 设置领养的缓存
         set_pet_cache(uid)
         # 获取领取用户信息
-        pet_info = Pet.get_info(uid)
-        if not pet_info:
+        user_join_pet_info = Pet.get_info(uid)
+        if not user_join_pet_info:
             return  self.redirect('/pets')
-        self.render('home.html', pet_info=pet_info)
+        user_join_pet_info.update(nickname=user_join_pet_info['nickname'].decode('unicode-escape'))
+        self.render('home.html', user_join_pet_info=user_join_pet_info)
 
 
 @router.Route('/pets')
@@ -35,22 +37,23 @@ class BabiesHandler(BaseTemplateRequestHandler):
     领养列表
     """
     # @tornado.web.authenticated
-    def get(self, *args, **kwargs):
+    def get(self):
         # 渲染列表页面
         self.render("pets.html")
 
 
-@router.Route('/pet/?P<ptype>.*')
+@router.Route('/pet/(?P<ptype>\w+)')
 class BabiesHandler(BaseTemplateRequestHandler):
     """
     领养接口,领养成功重定向个人页
     """
-    @tornado.web.authenticated
+    # @tornado.web.authenticated
     def get(self, ptype):
-
         uid = self.current_user
+        uid = 1
         # 如果领取了,重定向个人页
         if has_pet_cache(uid) or Pet.findone(uid=uid):
+            logger.info('user {} have get pet'.format(uid))
             return self.redirect('/home')
 
         # 领养

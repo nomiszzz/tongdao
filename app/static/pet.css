@@ -43,7 +43,7 @@ a:hover { text-decoration: none; }
     .eventGround .contain .userName em{display: inline-block;width: 14px;height: 14px;vertical-align: text-bottom;margin-left: 6px;background-image: url(images/gender.png);background-repeat: no-repeat;}
     .female{background-position: 0 0;}
     .male{background-position: 0 -14px;}
-    .eventGround .contain .star{position: absolute;top:0;left:0;display: none;}
+    .eventGround .contain .star{position: absolute;top:0;left:0;}
     .eventGround ul{width: 100%;height: auto;overflow: hidden;position: relative;}
     .eventGround ul li{float: left;position: relative;cursor: pointer;}
     .li5{width: 30%}

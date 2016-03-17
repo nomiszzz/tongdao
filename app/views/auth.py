@@ -65,6 +65,7 @@ class CallbackHandler(BaseRequestHandler):
             return
 
         openid = data['openid']
+        sex = data['sex']
         nickname = data['nickname'].encode('unicode-escape')
         avatar = '{}64'.format(data['headimgurl'][:-1])
 
@@ -82,7 +83,7 @@ class CallbackHandler(BaseRequestHandler):
                 return
         else:
             # 写入新用户
-            user = User(nickname=nickname, avatar=avatar, openid=openid)
+            user = User(nickname=nickname, avatar=avatar, openid=openid, sex=sex)
             try:
                 row = user.insert()
                 logger.info('insert user success {}'.format(row))
