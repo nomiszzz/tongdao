@@ -14,10 +14,9 @@ from settings import logger, rdb
 @router.Route('/home')
 class HomeHandler(BaseTemplateRequestHandler):
 
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self, *args, **kwargs):
         uid = self.current_user
-        uid = 1
         # 如果尚未领取,重定向领取列表
         if not has_pet_cache(uid) and not Pet.findone(uid=uid):
             return self.redirect('/pets')
@@ -37,7 +36,7 @@ class PetsHandler(BaseTemplateRequestHandler):
     """
     领养列表
     """
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self):
         # 渲染列表页面
         self.render("pets.html")
@@ -48,10 +47,9 @@ class PetHandler(BaseTemplateRequestHandler):
     """
     领养接口,领养成功重定向个人页
     """
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self, ptype):
         uid = self.current_user
-        uid = 1
         # 如果领取了,重定向个人页
         if has_pet_cache(uid) or Pet.findone(uid=uid):
             logger.info('user {} have get pet'.format(uid))
@@ -72,7 +70,7 @@ class PetHandler(BaseTemplateRequestHandler):
 @router.Route('/awards')
 class AwardsHandler(BaseTemplateRequestHandler):
 
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self, *args, **kwargs):
         awards = Award.findall()
         for ad in awards:
@@ -89,10 +87,9 @@ class KeepHandler(BaseApiRequestHandler):
              每天仅能进行一次
     """
 
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self):
         uid = self.current_user
-        uid = 1
         type_ = self.get_argument('type', None)
         if not type_:
             self.set_status(400)
