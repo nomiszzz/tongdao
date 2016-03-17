@@ -1,42 +1,26 @@
 {% extends "base.html" %}
 {% block title %}选择宝宝{% end %}
 {% block main %}
-  <div>
-    <section>
-      <span>风像星座</span>
-      <ul>
-        <li><a href="/home/{{ session['uid'] }}/1">11</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-      </ul>
-    </section>
-
-    <section>
-      <span>水像星座</span>
-      <ul>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-      </ul>
-    </section>
-
-    <section>
-      <span>火像星座</span>
-      <ul>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-      </ul>
-    </section>
-
-        <section>
-      <span>土像星座</span>
-      <ul>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-      </ul>
-    </section>
-
-  </div>
+<div class="eventGround"  id="choose">
+    <img src="/static/images/pic6.jpg"/>
+    <nav>
+        <img class="li1" src="/static/images/pic7.jpg"/>
+        <span class="li2" data-constellation="aquarius"><img src="/static/images/pic8.jpg"/></span>
+        <span class="li3" data-constellation="libra"><img src="/static/images/pic9.jpg"/></span>
+        <span class="li4" data-constellation="gemini"><img src="/static/images/pic10.jpg"/></span>
+        <img class="li1" src="/static/images/pic11.jpg"/>
+        <span class="li2" data-constellation="pisces"><img src="/static/images/pic12.jpg"/></span>
+        <span class="li3" data-constellation="scorpio"><img src="/static/images/pic14.jpg"/></span>
+        <span class="li4" data-constellation="cancer"><img src="/static/images/pic15.jpg"/></span>
+        <img class="li1" src="/static/images/pic16.jpg"/>
+        <span class="li2" data-constellation="leo"><img src="/static/images/pic17.jpg"/></span>
+        <span class="li3" data-constellation="sagittarius"><img src="/static/images/pic18.jpg"/></span>
+        <span class="li4" data-constellation="aries"><img src="/static/images/pic19.jpg"/></span>
+        <img class="li1" src="/static/images/pic20.jpg"/>
+        <span class="li2" data-constellation="taurus"><img src="/static/images/pic21.jpg"/></span>
+        <span class="li3" data-constellation="virgo"><img src="/static/images/pic22.jpg"/></span>
+        <span class="li4" data-constellation="capricorn"><img src="/static/images/pic23.jpg"/></span>
+    </nav>
+    <img src="/static/images/pic24.jpg"/>
+</div>
 {% end %}

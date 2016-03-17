@@ -34,7 +34,7 @@ class BabiesHandler(BaseTemplateRequestHandler):
     """
     领养列表
     """
-    @tornado.web.authenticated
+    # @tornado.web.authenticated
     def get(self, *args, **kwargs):
         # 渲染列表页面
         self.render("pets.html")
