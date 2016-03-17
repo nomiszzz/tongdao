@@ -116,7 +116,7 @@ class KeepHandler(BaseApiRequestHandler):
         except Exception, e:
             self.set_status(500)
             logger.error('keep pet error {}'.format(e))
-            result = dict(code=40012, msg=u'更新服务器错误')
+            result = dict(code=40012, msg=u'更新服务器错误, 请稍后重试!')
             return self.jsonify(result)
 
         self.set_status(201)

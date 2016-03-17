@@ -106,9 +106,10 @@
           }
         },
         error: function(XMLHttpResponse, textStatus){
+          console.log(XMLHttpResponse)
           var status_code = XMLHttpResponse.status;
           var body = JSON.parse(XMLHttpResponse.responseText);
-          alert(body.message)
+          alert(body.msg)
         }
       })
     }
