@@ -67,32 +67,52 @@
             var _index = $(this).index();
             switch(_index){
                 case 0:
-                    $("#feed").animate({top:'-30%',opacity:"1"},5000);
                     var num = parseInt($("#feed").find("em").html());
                     var scores =parseInt($(".scores span").html());
-                    scores +=num;
-                    $(".scores span").html(scores);
+                    var url = '/api/v1/keep?type=eat';
+                    request(url, scores, num, "#feed");
                     break;
                 case 1:
-
-                    $("#bath").animate({top:'-30%',opacity:"1"},5000);
                     var num = parseInt($("#bath").find("em").html());
                     var scores =parseInt($(".scores span").html());
-                    scores +=num;
-                    $(".scores span").html(scores);
+                    var url = '/api/v1/keep?type=wash';
+                    request(url, scores, num, "#bath");
                     break;
                 case 2:
-
-                    $("#game").animate({top:'-30%',opacity:"1"},5000);
                     var num = parseInt($("#game").find("em").html());
                     var scores =parseInt($(".scores span").html());
-                    scores +=num;
-                    $(".scores span").html(scores);
+                    var url = '/api/v1/keep?type=game';
+                    request(url, scores, num, "#game");
                     break;
             }
             $(this).unbind("click");
         });
     });
+
+
+    function request(url, scores, num, selecotr){
+      $.ajax({
+        async: true,
+        url: url,
+        type: 'get',
+        success: function (resp){
+          if (resp.code == 40010){
+            alert(resp.msg);
+            return
+          }else{
+            $(selecotr).animate({top:'-30%',opacity:"1"}, 3000);
+            scores +=num;
+            $(".scores span").html(scores);
+          }
+        },
+        error: function(XMLHttpResponse, textStatus){
+          var status_code = XMLHttpResponse.status;
+          var body = JSON.parse(XMLHttpResponse.responseText);
+          alert(body.message)
+        }
+      })
+    }
+
    /* //添加cookie
     function addCookie(name,value,expiresHours){
         var cookieString=name+"="+escape(value);
