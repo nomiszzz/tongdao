@@ -1,0 +1,57 @@
+{% extends "adminbase.html" %}
+{% block title %}奖品修改{% end %}
+{% block main %}
+<div class="row">
+  <br/>
+  <br/>
+  <br/>
+  <div class="col-md-4 col-md-push-4">
+    <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
+      {% module xsrf_form_html() %}
+      <div class="form-group {% if error %} has-error {% end %}">
+        <label for="name" class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="name" name="name" value="{{ award['name'] }}">
+          <p class="help-block">请输入奖品说明</p>
+        </div>
+      </div>
+      <div class="form-group {% if error %} has-error {% end %}">
+        <label for="name" class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="provide" name="provide" value="{{ award['provide'] }}">
+          <p class="help-block">请输入奖品提供方</p>
+        </div>
+      </div>
+      <div class="form-group {% if error %} has-error {% end %}">
+        <label for="name" class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="score" name="score" value="{{ award['score'] }}">
+          <p class="help-block">请输入兑换所需的点数</p>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="file" class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+          <input type="file" class="form-control" id="file" name="file">
+          <p class="help-block">请选择奖品图片,不选则不会修改原图</p>
+        </div>
+      </div>
+      <div class="form-group {% if error %} has-error {% end %}">
+        <label for="file" class="col-sm-2 control-label"></label>
+        <div class="col-sm-10">
+          <select class="form-control" id="status" name="status">
+            <option value="0" {% if award['status'] == 0 %}selected="selected"{% end %}>无效</option>
+            <option value="1" {% if award['status'] == 1 %}selected="selected"{% end %}>有效</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-2 col-sm-10">
+          <button type="submit" class="btn btn-default">修改</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% end %}

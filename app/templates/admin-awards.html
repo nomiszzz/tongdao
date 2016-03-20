@@ -1,5 +1,5 @@
 {% extends "adminbase.html" %}
-{% block title %}后台登录{% end %}
+{% block title %}奖品列表{% end %}
 {% block main %}
 <div class="row">
   <br/>
@@ -11,26 +11,30 @@
       <tr>
         <th class="text-center">序号</th>
         <th class="text-center">说明</th>
+        <th class="text-center">提供商</th>
+        <th class="text-center">兑换点数</th>
         <th class="text-center">图片</th>
         <th class="text-center">状态</th>
         <th class="text-center">修改</th>
       </tr>
       </thead>
       <tbody>
-      {% if banners %}
-        {% for banner in banners %}
+      {% if awards %}
+        {% for award in awards %}
         <tr>
-          <td class="text-center">{{ banner['id'] }}</td>
-          <td class="text-center">{{ banner['name'] }}</td>
-          <td class="text-center"><a href="{{ banner['image'] }}">查看图片</a></td>
+          <td class="text-center">{{ award['id'] }}</td>
+          <td class="text-center">{{ award['name'] }}</td>
+          <td class="text-center">{{ award['provide'] }}</td>
+          <th class="text-center">{{ award['score'] }}</th>
+          <td class="text-center"><a href="{{ award['image'] }}">查看图片</a></td>
           <td class="text-center">
-            {% if banner['status'] == 1 %}
+            {% if award['status'] == 1 %}
               有效
             {% else %}
               无效
             {% end %}
           </td>
-          <td class="text-center"><a href="/admin/banner/{{ banner['id'] }}/update">修改</a></td>
+          <td class="text-center"><a href="/admin/award/{{ award['id'] }}/update">修改</a></td>
         </tr>
         {% end %}
       {% end %}

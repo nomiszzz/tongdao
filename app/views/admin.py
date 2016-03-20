@@ -63,7 +63,7 @@ class AdminBannersHandler(AdminBaseHandler):
         banners = Banner.findall()
         self.render('admin-banners.html', banners=banners)
 
-@router.Route('/admin/banner/(?P<bid>\d+)')
+@router.Route('/admin/banner/(?P<bid>\d+)/update')
 class AdminBannerHandler(AdminBaseHandler):
 
     @admin_require
@@ -119,5 +119,80 @@ class AdminBannerHandler(AdminBaseHandler):
             self.render('admin-banner.html', banner=banner, error=error, message=message)
         else:
             self.redirect('/admin/banners')
+
+@router.Route('/admin/awards')
+class AwardsHandler(AdminBaseHandler):
+
+    @admin_require
+    def get(self, *args, **kwargs):
+        awards = Award.findall()
+        self.render('admin-awards.html', awards=awards)
+
+
+@router.Route('/admin/award/(?P<aid>\d+)/update')
+class AwardHandler(AdminBaseHandler):
+
+    @admin_require
+    def get(self, aid):
+        award = Award.findone(id=aid)
+        self.render('admin-award-update.html', award=award)
+
+    @admin_require
+    def post(self, aid):
+        award = Award.findone(id=aid)
+        name = self.get_argument('name')
+        provide = self.get_argument('provide')
+        score = self.get_argument('score')
+        status = self.get_argument('status')
+
+        if name:
+            award.name = name
+
+        if provide:
+            award.provide = provide
+
+        if score:
+            award.score = int(score)
+
+        if status:
+            award.status =  int(status)
+
+        # 图片上传
+        if self.request.files:
+            files_body = self.request.files['file']
+            file_ = files_body[0]
+            # 文件扩展名处理
+            file_extension = parse_file_extension(file_)
+
+            # 新建上传目录
+            base_dir = config.UPLOADS_DIR['award_dir']
+            if not os.path.exists(base_dir):
+                os.makedirs(base_dir)
+            logger.info('new dir ---------- {}'.format(base_dir))
+
+            new_file_name = '{}{}'.format(time.time(), file_extension)
+            new_file = os.path.join(base_dir, new_file_name)
+
+            # 备份以前上传的文件
+            if os.path.isfile(new_file):
+                bak_file_name = '{}bak{}'.format(time.time(), file_extension)
+                bak_file = os.path.join(base_dir, bak_file_name)
+                os.rename(new_file, bak_file)
+
+            # 写入文件
+            with open(new_file, 'w') as w:
+                w.write(file_['body'])
+            new_file_url = '{}{}'.format('/static/uploads/award/', new_file_name)
+            logger.info('new file url {}'.format(new_file_url))
+            award.image = new_file_url
+        try:
+            row = award.update()
+            logger.info('update award row {}'.format(row))
+        except Exception, e:
+            logger.error('update award error {}'.format(e))
+            error, message = True, u'修改失败'
+            self.render('admin-award.html', award=award, error=error, message=message)
+        else:
+            self.redirect('/admin/awards')
 
 
