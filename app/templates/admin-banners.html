@@ -1,0 +1,41 @@
+{% extends "adminbase.html" %}
+{% block title %}后台登录{% end %}
+{% block main %}
+<div class="row">
+  <br/>
+  <br/>
+  <br/>
+  <div class="col-md-8 col-md-push-2">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th class="text-center">序号</th>
+        <th class="text-center">说明</th>
+        <th class="text-center">图片</th>
+        <th class="text-center">状态</th>
+        <th class="text-center">修改</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% if banners %}
+        {% for banner in banners %}
+        <tr>
+          <td class="text-center">{{ banner['id'] }}</td>
+          <td class="text-center">{{ banner['name'] }}</td>
+          <td class="text-center"><a href="{{ banner['image'] }}">查看图片</a></td>
+          <td class="text-center">
+            {% if banner['status'] == 1 %}
+              有效
+            {% else %}
+              无效
+            {% end %}
+          </td>
+          <td class="text-center"><a href="/admin/banner/{{ banner['id'] }}">修改</a></td>
+        </tr>
+        {% end %}
+      {% end %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% end %}

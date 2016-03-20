@@ -9,7 +9,7 @@ from app.libs.tornorm import Model, Integer, Time, String
 class Pet(Model):
     __table__ = 'pet'
 
-    id = Integer(length=8, primary_key=True, nullable=False)
+    id = Integer(length=8, primary_key=True, nullable=False, auto_increment=True, updateable=False)
     uid = Integer(length=8, nullable=True)
     type = Integer(length=1, nullable=True)
     score = Integer(length=8, default=0)
@@ -27,18 +27,4 @@ class Pet(Model):
     @classmethod
     def keep(cls, uid, score):
         return cls.raw_update("UPDATE pet SET score=score + %s WHERE uid=%s", score, uid)
-        # if score == 2:
-        #     return cls.raw_update("UPDATE pet SET score=score + 2 WHERE uid=%s", uid)
-        # elif score == 3:
-        #     return cls.raw_update("UPDATE pet SET score=score + 3 WHERE uid=%s", uid)
-        # else:
-        #     return cls.raw_update("UPDATE pet SET score=score + 5 WHERE uid=%s", uid)
 
-class Award(Model):
-    __table__ = 'award'
-
-    id = Integer(length=8, primary_key=True, nullable=False)
-    name = String(length=150, nullable=True)
-    provide = String(length=150, nullable=True)
-    image = String(length=20, nullable=True)
-    score = Integer(length=8, default=0)

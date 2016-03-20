@@ -4,6 +4,7 @@
 __author__ = 'ghost'
 
 from app.models.auth import Admin
+from app.models.admin import Banner, Award
 from app.helper import AdminBaseHandler, admin_require, encrypt_password
 from app.libs import router
 
@@ -19,7 +20,6 @@ class AdminHandler(AdminBaseHandler):
 class AdminLoginHandler(AdminBaseHandler):
 
     def get(self):
-        # 渲染列表页面
         self.render('admin-login.html')
 
     def post(self):
@@ -51,3 +51,11 @@ class AdminLogoutHandler(AdminBaseHandler):
         self.session.save()
         error, message = False, u'登出成功'
         self.render('admin-login.html', error=error, message=message)
+
+@router.Route('/admin/banner')
+class AdminBannerHandler(AdminBaseHandler):
+
+    @admin_require
+    def get(self):
+        banners = Banner.findall()
+        self.render('admin-banners.html', banners=banners)
