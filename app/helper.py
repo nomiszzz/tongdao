@@ -4,6 +4,7 @@
 __author__ = 'ghost'
 
 import json
+import hashlib
 import random
 import datetime
 import functools
@@ -53,6 +54,14 @@ class AdminBaseHandler(BaseRequestHandler):
             return None
         return admin
 
+    def get_template_namespace(self):
+        print 'dsa'
+        namespace = super(AdminBaseHandler, self).get_template_namespace()
+        namespace.update(
+                error=False,
+                message=None
+        )
+        return namespace
 
 class BaseApiRequestHandler(BaseRequestHandler):
     def check_xsrf_cookie(self):
@@ -94,3 +103,6 @@ def get_to_tomorrow():
     now = datetime.datetime.now()
     tomorrow = datetime.datetime(now.year, now.month, now.day + 1)
     return (tomorrow - now).seconds
+
+def encrypt_password(password):
+    return hashlib.md5(password).hexdigest()

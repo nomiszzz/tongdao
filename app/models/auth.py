@@ -19,3 +19,10 @@ class User(Model):
     def __repr__(self):
         return '<User {}>'.format(self.nickname)
 
+
+class Admin(Model):
+    __table__ = 'admin'
+
+    id = Integer(length=8, primary_key=True, nullable=False)
+    username = String(length=60, nullable=True)
+    password = String(length=20, nullable=True)

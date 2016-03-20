@@ -30,8 +30,8 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav">
             {% if current_user %}
-            <li class="active"><a href="/admin/channels">轮播图</a></li>
-            <li class="active"><a href="/admin/statistics">兑奖区</a></li>
+            <li class="active"><a href="/admin/banner">轮播图</a></li>
+            <li class="active"><a href="/admin/award">兑奖区</a></li>
             {% end %}
           </ul>
 
@@ -57,6 +57,14 @@
   </div>
 </header>
 <div class="container">
+  <br />
+  {% if message %}
+  <div class="alert alert-{% if error %}danger{% else %}success{% end %} alert-dismissible text-center" role="alert">
+    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span
+            class="sr-only">Close</span></button>
+    <strong>{{ message }}</strong>
+  </div>
+  {% end %}
   <div class="row">
     <div class="col-md-12" role="main">
       {% block main %}{% end %}
