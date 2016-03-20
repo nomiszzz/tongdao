@@ -3,7 +3,6 @@
 
 __author__ = 'ghost'
 
-
 import json
 import random
 import datetime
@@ -27,13 +26,21 @@ class BaseRequestHandler(tornado.web.RequestHandler):
         self.finish(json.dumps(data))
 
 
-class BaseTemplateRequestHandler(BaseRequestHandler):
-    def get_template_namespace(self):
-        namespace = super(BaseTemplateRequestHandler, self).get_template_namespace()
-        namespace.update(
-                session=self.session
-        )
-        return namespace
+# class BaseTemplateRequestHandler(BaseRequestHandler):
+#     def get_template_namespace(self):
+#         namespace = super(BaseTemplateRequestHandler, self).get_template_namespace()
+#         namespace.update(
+#                 session=self.session
+#         )
+#         return namespace
+
+class AdminBaseHandler(BaseRequestHandler):
+    def get_current_user(self):
+        super(AdminBaseHandler, self).get_current_user()
+        admin = self.session.get('admin')
+        if not admin:
+            return None
+        return admin
 
 
 class BaseApiRequestHandler(BaseRequestHandler):
@@ -64,12 +71,13 @@ def set_pet_cache(uid):
     """
     key = 'uid:{}:getpet'.format(uid)
     rdb.set(key, '1')
-    rdb.expire(key, 60*60)
+    rdb.expire(key, 60 * 60)
 
 
 def gen_random_code(length=6):
-    chars='0123456789'
+    chars = '0123456789'
     return ''.join([random.choice(chars) for i in range(length)])
+
 
 def get_to_tomorrow():
     now = datetime.datetime.now()

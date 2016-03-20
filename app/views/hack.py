@@ -46,3 +46,40 @@ class EmojiHandle(BaseRequestHandler):
         r =  user['nickname'].decode('unicode-escape')
 
         self.write(r)
+
+import tornado.web
+import tornado.gen
+import tornado.auth
+
+class FacebookGraphLoginHandler(tornado.web.RequestHandler,
+                                tornado.auth.FacebookGraphMixin):
+  @tornado.gen.coroutine
+  def get(self):
+      if self.get_argument("code", False):
+          user = yield self.get_authenticated_user(
+              redirect_uri='/auth/facebookgraph/',
+              client_id=self.settings["facebook_api_key"],
+              client_secret=self.settings["facebook_secret"],
+              code=self.get_argument("code"))
+          # Save the user with e.g. set_secure_cookie
+      else:
+          yield self.authorize_redirect(
+              redirect_uri='/auth/facebookgraph/',
+              client_id=self.settings["facebook_api_key"],
+              extra_params={"scope": "read_stream,offline_access"})
+
+class MainHandler(tornado.web.RequestHandler,
+                  tornado.auth.FacebookGraphMixin):
+    @tornado.web.authenticated
+    @tornado.gen.coroutine
+    def get(self):
+        new_entry = yield self.facebook_request(
+            "/me/feed",
+            post_args={"message": "I am posting from my Tornado application!"},
+            access_token=self.current_user["access_token"])
+
+        if not new_entry:
+            # Call failed; perhaps missing permission?
+            yield self.authorize_redirect()
+            return
+        self.finish("Posted a message!")

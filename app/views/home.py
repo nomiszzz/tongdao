@@ -4,7 +4,7 @@
 __author__ = 'ghost'
 
 import tornado.web
-from app.helper import BaseTemplateRequestHandler, has_pet_cache, set_pet_cache, BaseApiRequestHandler
+from app.helper import BaseRequestHandler, has_pet_cache, set_pet_cache, BaseApiRequestHandler
 from app.libs import router
 from app.helper import gen_random_code, get_to_tomorrow
 from app.models.home import Pet, Award
@@ -12,7 +12,7 @@ from settings import logger, rdb
 
 
 @router.Route('/home')
-class HomeHandler(BaseTemplateRequestHandler):
+class HomeHandler(BaseRequestHandler):
 
     @tornado.web.authenticated
     def get(self, *args, **kwargs):
@@ -32,7 +32,7 @@ class HomeHandler(BaseTemplateRequestHandler):
 
 
 @router.Route('/pets')
-class PetsHandler(BaseTemplateRequestHandler):
+class PetsHandler(BaseRequestHandler):
     """
     领养列表
     """
@@ -43,7 +43,7 @@ class PetsHandler(BaseTemplateRequestHandler):
 
 
 @router.Route('/pet/(?P<ptype>\w+)')
-class PetHandler(BaseTemplateRequestHandler):
+class PetHandler(BaseRequestHandler):
     """
     领养接口,领养成功重定向个人页
     """
@@ -68,7 +68,7 @@ class PetHandler(BaseTemplateRequestHandler):
         self.redirect('/home')
 
 @router.Route('/awards')
-class AwardsHandler(BaseTemplateRequestHandler):
+class AwardsHandler(BaseRequestHandler):
 
     @tornado.web.authenticated
     def get(self, *args, **kwargs):
