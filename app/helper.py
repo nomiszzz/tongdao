@@ -3,6 +3,7 @@
 
 __author__ = 'ghost'
 
+import os
 import json
 import hashlib
 import random
@@ -55,7 +56,6 @@ class AdminBaseHandler(BaseRequestHandler):
         return admin
 
     def get_template_namespace(self):
-        print 'dsa'
         namespace = super(AdminBaseHandler, self).get_template_namespace()
         namespace.update(
                 error=False,
@@ -106,3 +106,9 @@ def get_to_tomorrow():
 
 def encrypt_password(password):
     return hashlib.md5(password).hexdigest()
+
+def parse_file_extension(file_):
+    # 文件扩展名处理
+    file_name, file_extension = os.path.splitext(file_['filename'])
+    file_extension = file_extension.lower()
+    return file_extension
