@@ -6,6 +6,7 @@ __author__ = 'ghost'
 import json
 import random
 import datetime
+import functools
 import tornado.web
 from app.libs import session
 from settings import rdb
@@ -33,6 +34,16 @@ class BaseRequestHandler(tornado.web.RequestHandler):
 #                 session=self.session
 #         )
 #         return namespace
+
+def admin_require(method):
+    @functools.wraps(method)
+    def wrapper(self, *args, **kwargs):
+        admin = self.current_user
+        if admin:
+            return method(self, *args, **kwargs)
+        else:
+            self.redirect('/admin/login')
+    return wrapper
 
 class AdminBaseHandler(BaseRequestHandler):
     def get_current_user(self):
