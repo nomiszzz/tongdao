@@ -53,10 +53,10 @@ def create_redis():
 def create_mysqldb():
     """ 创建 mysql 连接 """
     mdb = Connection(
-        config.MYSQLDB['host'],
-        config.MYSQLDB['db'],
-        config.MYSQLDB['user'],
-        config.MYSQLDB['password'],
+        host=config.MYSQLDB['host'],
+        database=config.MYSQLDB['db'],
+        user=config.MYSQLDB['user'],
+        password=config.MYSQLDB['password'],
     )
     return mdb
 
