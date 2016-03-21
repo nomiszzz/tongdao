@@ -7,14 +7,13 @@ import tornado.web
 from app.helper import BaseRequestHandler, has_pet_cache, set_pet_cache, BaseApiRequestHandler
 from app.libs import router
 from app.helper import gen_random_code, get_to_tomorrow
-from app.models.home import  Pet
-from app.models.admin import Award
+from app.models.home import Pet
+from app.models.admin import Award, Banner
 from settings import logger, rdb
 
 
 @router.Route('/home')
 class HomeHandler(BaseRequestHandler):
-
     @tornado.web.authenticated
     def get(self, *args, **kwargs):
         uid = self.current_user
@@ -27,7 +26,7 @@ class HomeHandler(BaseRequestHandler):
         # 获取领取用户信息
         user_join_pet_info = Pet.get_info(uid)
         if not user_join_pet_info:
-            return  self.redirect('/pets')
+            return self.redirect('/pets')
         user_join_pet_info.update(nickname=user_join_pet_info['nickname'].decode('unicode-escape'))
         self.render('home.html', user_join_pet_info=user_join_pet_info)
 
@@ -37,6 +36,7 @@ class PetsHandler(BaseRequestHandler):
     """
     领养列表
     """
+
     @tornado.web.authenticated
     def get(self):
         # 渲染列表页面
@@ -48,6 +48,7 @@ class PetHandler(BaseRequestHandler):
     """
     领养接口,领养成功重定向个人页
     """
+
     @tornado.web.authenticated
     def get(self, ptype):
         uid = self.current_user
@@ -68,15 +69,63 @@ class PetHandler(BaseRequestHandler):
             return self.redirect('/pets')
         self.redirect('/home')
 
+
 @router.Route('/awards')
 class AwardsHandler(BaseRequestHandler):
-
-    @tornado.web.authenticated
+    # @tornado.web.authenticated
     def get(self, *args, **kwargs):
-        awards = Award.findall()
+        awards = Award.findall(status=1)
         for ad in awards:
             setattr(ad, 'code', gen_random_code())
-        self.render('awards.html', awards=awards)
+        banners = Banner.findall(status=1)
+        self.render('awards.html', awards=awards, banners=banners)
+
+
+@router.Route('/awards/(?P<aid>\d+)/code/(?P<code>\d+)')
+class AwardsCodeHandler(BaseApiRequestHandler):
+    """
+    领取奖品
+    """
+
+    # @tornado.web.authenticated
+    def post(self, aid, code):
+        uid = self.current_user
+
+        uid=1
+
+        pet = Pet.findone(uid=uid)
+        # 如果没有领取
+        if not pet:
+            self.set_status(400)
+            result = dict(code=40021, msg=u'尚未领取宝贝哦')
+            return self.jsonify(result)
+
+        award = Award.findone(id=aid, status=1)
+
+        # 奖品下线
+        if not award:
+            self.set_status(400)
+            result = dict(code=40022, msg=u'奖品已经下线,请联系客服哦')
+            return self.jsonify(result)
+
+        # 所需点数大于当前点数,无法领取
+        if award['score'] > pet['score']:
+            self.set_status(400)
+            result = dict(code=40022, msg=u'领取点数不符合哦')
+            return self.jsonify(result)
+
+        # 领取扣除点数
+        if Pet.wining(uid=uid, aid=award['id'], score=award['score'], code=code):
+            logger.info("insert winning success")
+            result = dict(code=40027, msg=u'兑换成功!')
+        else:
+            logger.warning('insert wining failed')
+            self.set_status(500)
+            result = dict(code=40012, msg=u'更新服务器错误, 请稍后重试!')
+
+        return self.jsonify(result)
+
+
 
 @router.Route('/api/v1/keep')
 class KeepHandler(BaseApiRequestHandler):
@@ -129,9 +178,3 @@ class KeepHandler(BaseApiRequestHandler):
             'game': {'name': u'游戏', 'score': 5}
         }
         return maps[type_]
-
-
-
-
-
-

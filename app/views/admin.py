@@ -64,7 +64,7 @@ class AdminBannersHandler(AdminBaseHandler):
         self.render('admin-banners.html', banners=banners)
 
 @router.Route('/admin/banner/(?P<bid>\d+)/update')
-class AdminBannerHandler(AdminBaseHandler):
+class AdminBannerUpdateHandler(AdminBaseHandler):
 
     @admin_require
     def get(self, bid):
@@ -121,7 +121,7 @@ class AdminBannerHandler(AdminBaseHandler):
             self.redirect('/admin/banners')
 
 @router.Route('/admin/banner/add')
-class AdminBannerHandler(AdminBaseHandler):
+class AdminBannerAddHandler(AdminBaseHandler):
 
     @admin_require
     def get(self):
@@ -179,7 +179,7 @@ class AdminBannerHandler(AdminBaseHandler):
             self.redirect('/admin/banners')
 
 @router.Route('/admin/awards')
-class AwardsHandler(AdminBaseHandler):
+class AdminAwardsHandler(AdminBaseHandler):
 
     @admin_require
     def get(self, *args, **kwargs):

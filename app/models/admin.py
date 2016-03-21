@@ -24,3 +24,11 @@ class Award(Model):
     image = String(length=20, nullable=True)
     score = Integer(length=8, default=0)
     status = Integer(length=8, default=0)
+
+class Winning(Model):
+    __table__ = 'award'
+
+    id = Integer(length=8, primary_key=True, nullable=False, auto_increment=True, updateable=False)
+    uid = Integer(length=8, nullable=True)
+    aid = Integer(length=8, nullable=True)
+    code = String(length=6, nullable=True)

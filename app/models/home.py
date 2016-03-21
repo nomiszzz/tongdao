@@ -3,7 +3,8 @@
 
 __author__ = 'ghost'
 
-from app.libs.tornorm import Model, Integer, Time, String
+from app.libs.tornorm import Model, Integer, Time
+from settings import db, logger
 
 
 class Pet(Model):
@@ -28,3 +29,27 @@ class Pet(Model):
     def keep(cls, uid, score):
         return cls.raw_update("UPDATE pet SET score=score + %s WHERE uid=%s", score, uid)
 
+    @classmethod
+    def unkeep(cls, uid, score):
+        return cls.raw_update("UPDATE pet SET score=score - %s WHERE uid=%s", score, uid)
+
+    @classmethod
+    def wining(cls, uid, aid, score, code):
+        """ 兑奖事物
+            减去个人的点数
+            插入领取的奖品
+        """
+        db._db.begin()
+        status = True
+        try:
+            logger.warning('-------------开始事务--------------')
+            db.execute("UPDATE pet SET score=score - %s WHERE uid=%s", score, uid)
+            db.execute("INSERT winning(uid, aid, code) VALUES (%s, %s, %s)", uid, aid, code)
+            db._db.commit()
+            logger.warning('--------------结束事务--------------')
+        except Exception, e:
+            logger.error('--------------e {}'.format(e))
+            status = False
+            logger.error('--------------回滚事务----------------')
+            db._db.rollback()
+        return status
