@@ -6,10 +6,10 @@ __author__ = 'ghost'
 import os
 import time
 from app.models.auth import Admin
-from app.models.admin import Banner, Award
-from app.helper import AdminBaseHandler, admin_require, encrypt_password,parse_file_extension
+from app.models.admin import Banner, Award, Winning
+from app.helper import AdminBaseHandler, admin_require, encrypt_password, parse_file_extension
 from app.libs import router
-from settings import logger,config
+from settings import logger, config
 
 
 @router.Route('/admin')
@@ -21,7 +21,6 @@ class AdminHandler(AdminBaseHandler):
 
 @router.Route('/admin/login')
 class AdminLoginHandler(AdminBaseHandler):
-
     def get(self):
         self.render('admin-login.html')
 
@@ -29,15 +28,15 @@ class AdminLoginHandler(AdminBaseHandler):
         username = self.get_argument('username', None)
         password = self.get_argument('password', None)
         if not username:
-            error, message=True, u"请输入用户名"
+            error, message = True, u"请输入用户名"
         elif not password:
-            error, message=True, u"请输入密码"
+            error, message = True, u"请输入密码"
         else:
             admin = Admin.findone(username=username)
             if not admin:
-                error, message=True, u"管理员不存在"
+                error, message = True, u"管理员不存在"
             elif encrypt_password(password) != admin.password:
-                error, message=True, u"管理员密码错误"
+                error, message = True, u"管理员密码错误"
             else:
                 self.session['admin'] = 'admin'
                 self.session.save()
@@ -55,17 +54,17 @@ class AdminLogoutHandler(AdminBaseHandler):
         error, message = False, u'登出成功'
         self.render('admin-login.html', error=error, message=message)
 
+
 @router.Route('/admin/banners')
 class AdminBannersHandler(AdminBaseHandler):
-
     @admin_require
     def get(self):
         banners = Banner.findall()
         self.render('admin-banners.html', banners=banners)
 
+
 @router.Route('/admin/banner/(?P<bid>\d+)/update')
 class AdminBannerUpdateHandler(AdminBaseHandler):
-
     @admin_require
     def get(self, bid):
         banner = Banner.findone(id=bid)
@@ -74,7 +73,7 @@ class AdminBannerUpdateHandler(AdminBaseHandler):
     @admin_require
     def post(self, bid):
         banner = Banner.findone(id=bid)
-        name =  self.get_argument('name')
+        name = self.get_argument('name')
         status = self.get_argument('status')
 
         if name:
@@ -120,9 +119,9 @@ class AdminBannerUpdateHandler(AdminBaseHandler):
         else:
             self.redirect('/admin/banners')
 
+
 @router.Route('/admin/banner/add')
 class AdminBannerAddHandler(AdminBaseHandler):
-
     @admin_require
     def get(self):
         self.render('admin-banner-add.html')
@@ -130,7 +129,7 @@ class AdminBannerAddHandler(AdminBaseHandler):
     @admin_require
     def post(self):
 
-        name =  self.get_argument('name')
+        name = self.get_argument('name')
         if not name:
             error, message = True, u'请填写banner说明'
             return self.render('admin-banner-add.html', error=error, message=message)
@@ -178,17 +177,17 @@ class AdminBannerAddHandler(AdminBaseHandler):
         else:
             self.redirect('/admin/banners')
 
+
 @router.Route('/admin/awards')
 class AdminAwardsHandler(AdminBaseHandler):
-
     @admin_require
     def get(self, *args, **kwargs):
         awards = Award.findall()
         self.render('admin-awards.html', awards=awards)
 
+
 @router.Route('/admin/award/(?P<aid>\d+)/update')
 class AwardHandler(AdminBaseHandler):
-
     @admin_require
     def get(self, aid):
         award = Award.findone(id=aid)
@@ -212,7 +211,7 @@ class AwardHandler(AdminBaseHandler):
             award.score = int(score)
 
         if status:
-            award.status =  int(status)
+            award.status = int(status)
 
         # 图片上传
         if self.request.files:
@@ -252,9 +251,9 @@ class AwardHandler(AdminBaseHandler):
         else:
             self.redirect('/admin/awards')
 
+
 @router.Route('/admin/award/add')
 class AdminAwardHandler(AdminBaseHandler):
-
     @admin_require
     def get(self):
         self.render('admin-award-add.html')
@@ -263,17 +262,17 @@ class AdminAwardHandler(AdminBaseHandler):
     def post(self):
 
         status = self.get_argument('status')
-        name =  self.get_argument('name')
+        name = self.get_argument('name')
         if not name:
             error, message = True, u'请填写奖品说明'
             return self.render('admin-award-add.html', error=error, message=message)
 
-        provide =  self.get_argument('provide')
+        provide = self.get_argument('provide')
         if not provide:
             error, message = True, u'请填提供商'
             return self.render('admin-award-add.html', error=error, message=message)
 
-        score =  self.get_argument('score')
+        score = self.get_argument('score')
 
         if not score:
             try:
@@ -326,3 +325,12 @@ class AdminAwardHandler(AdminBaseHandler):
         else:
             self.redirect('/admin/awards')
 
+
+@router.Route('/admin/winnings')
+class AdminWinningsHandler(AdminBaseHandler):
+    @admin_require
+    def get(self, *args, **kwargs):
+        winnings = Winning.get_all()
+        for wn in winnings:
+            wn['nickname'] = wn['nickname'].decode('unicode-escape')
+        self.render('admin-winnings.html', winnings=winnings)

@@ -72,7 +72,7 @@ class PetHandler(BaseRequestHandler):
 
 @router.Route('/awards')
 class AwardsHandler(BaseRequestHandler):
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self, *args, **kwargs):
         awards = Award.findall(status=1)
         for ad in awards:
@@ -87,12 +87,9 @@ class AwardsCodeHandler(BaseApiRequestHandler):
     领取奖品
     """
 
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def post(self, aid, code):
         uid = self.current_user
-
-        uid=1
-
         pet = Pet.findone(uid=uid)
         # 如果没有领取
         if not pet:

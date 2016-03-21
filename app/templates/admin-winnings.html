@@ -1,0 +1,48 @@
+{% extends "adminbase.html" %}
+{% block title %}奖品列表{% end %}
+{% block main %}
+<div class="row">
+  <br/>
+  <br/>
+  <br/>
+  <div class="col-md-8 col-md-push-2">
+    <button class="btn btn-mini btn-warning" type="button"><a href="/admin/award/add">添加</a></button>
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th class="text-center">序号</th>
+        <th class="text-center">昵称</th>
+        <th class="text-center">奖品</th>
+        <th class="text-center">查看奖品图片</th>
+        <th class="text-center">兑换码</th>
+        <th class="text-center">是否兑换了</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% if winnings %}
+        {% for wg in winnings %}
+        <tr>
+          <td class="text-center">{{ wg['id'] }}</td>
+          <td class="text-center">{{ wg['nickname'] }}</td>
+          <td class="text-center">{{ wg['award_name'] }}</td>
+          <th class="text-center"><a href="{{ wg['award_image'] }}">查看奖品图片</a></th>
+          <th class="text-center">{{ wg['code'] }}</th>
+          <th class="text-center">
+            {% if wg['status'] == 0 %}
+            尚未兑换
+            {% else %}
+            已经兑换
+            {% end %}
+          </th>
+        </tr>
+        {% end %}
+      {% else %}
+        <tr>还没有人兑换奖品~</tr>
+      {% end %}
+
+      </tbody>
+    </table>
+  </div>
+</div>
+{% end %}
