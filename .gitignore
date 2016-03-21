@@ -24,6 +24,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+/config/pro.py
 /config/test.py
 
 # PyInstaller
