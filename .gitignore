@@ -69,6 +69,7 @@ target/
 .ipynb_checkpoints
 
 venv/
+/tmp
 /conf/nginx.conf
 /conf/supervisor-dev.conf
 .idea/
