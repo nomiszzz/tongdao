@@ -173,7 +173,6 @@ class AwardsCodeHandler(BaseApiRequestHandler):
         return self.jsonify(result)
 
 
-
 @router.Route('/api/v1/keep')
 class KeepHandler(BaseApiRequestHandler):
     """ 喂养接口,
