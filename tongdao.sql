@@ -11,7 +11,7 @@
  Target Server Version : 50624
  File Encoding         : utf-8
 
- Date: 03/21/2016 17:59:54 PM
+ Date: 03/23/2016 18:00:40 PM
 */
 
 SET NAMES utf8;
@@ -46,9 +46,13 @@ CREATE TABLE `award` (
   `image` varchar(100) DEFAULT NULL COMMENT '奖品图片',
   `score` int(8) DEFAULT NULL COMMENT '奖品点数',
   `status` tinyint(1) DEFAULT '1' COMMENT '是否有效',
-  `count` int(8) DEFAULT '0' COMMENT '数量',
+  `counts` int(8) DEFAULT '0' COMMENT '数量',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+--  Records of `award`
+-- ----------------------------
 
 -- ----------------------------
 --  Table structure for `banner`
@@ -65,9 +69,6 @@ CREATE TABLE `banner` (
 -- ----------------------------
 --  Records of `banner`
 -- ----------------------------
-BEGIN;
-INSERT INTO `banner` VALUES ('1', '有效', '/static/uploads/banner/1458531568.63.jpg', '1');
-COMMIT;
 
 -- ----------------------------
 --  Table structure for `pet`
@@ -86,7 +87,7 @@ CREATE TABLE `pet` (
 --  Records of `pet`
 -- ----------------------------
 BEGIN;
-INSERT INTO `pet` VALUES ('4', '1', 'mojie', '105', '2016-03-17 22:30:41');
+INSERT INTO `pet` VALUES ('4', '1', 'mojie', '-295', '2016-03-17 22:30:41');
 COMMIT;
 
 -- ----------------------------
@@ -120,6 +121,11 @@ CREATE TABLE `winning` (
   `code` varchar(255) DEFAULT NULL COMMENT '兑换码',
   `status` tinyint(1) DEFAULT '0' COMMENT '是否兑换了',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+--  Records of `winning`
+-- ----------------------------
+
 
 SET FOREIGN_KEY_CHECKS = 1;
