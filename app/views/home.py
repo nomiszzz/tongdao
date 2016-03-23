@@ -72,23 +72,64 @@ class PetHandler(BaseRequestHandler):
 
 @router.Route('/awards')
 class AwardsHandler(BaseRequestHandler):
-    @tornado.web.authenticated
+    # @tornado.web.authenticated
     def get(self, *args, **kwargs):
         awards = Award.findall(status=1)
-        for ad in awards:
-            setattr(ad, 'code', gen_random_code())
         banners = Banner.findall(status=1)
         self.render('awards.html', awards=awards, banners=banners)
 
 
-@router.Route('/awards/(?P<aid>\d+)/code/(?P<code>\d+)')
+# @router.Route('/awards/(?P<aid>\d+)/code/(?P<code>\d+)')
+# class AwardsCodeHandler(BaseApiRequestHandler):
+#     """
+#     领取奖品
+#     """
+#
+#     @tornado.web.authenticated
+#     def post(self, aid, code):
+#         uid = self.current_user
+#         pet = Pet.findone(uid=uid)
+#         # 如果没有领取
+#         if not pet:
+#             self.set_status(400)
+#             result = dict(code=40021, msg=u'尚未领取宝贝哦')
+#             return self.jsonify(result)
+#
+#         award = Award.findone(id=aid, status=1)
+#
+#         # 奖品下线
+#         if not award:
+#             self.set_status(400)
+#             result = dict(code=40022, msg=u'奖品已经下线,请联系客服哦')
+#             return self.jsonify(result)
+#
+#         # 所需点数大于当前点数,无法领取
+#         if award['score'] > pet['score']:
+#             self.set_status(400)
+#             result = dict(code=40022, msg=u'领取点数不符合哦')
+#             return self.jsonify(result)
+#
+#         # 领取扣除点数
+#         if Pet.wining(uid=uid, aid=award['id'], score=award['score'], code=code):
+#             logger.info("insert winning success")
+#             result = dict(code=40027, msg=u'兑换成功!')
+#         else:
+#             logger.warning('insert wining failed')
+#             self.set_status(500)
+#             result = dict(code=40012, msg=u'更新服务器错误, 请稍后重试!')
+#
+#         return self.jsonify(result)
+#
+
+
+@router.Route('/awards/(?P<aid>\d+)')
 class AwardsCodeHandler(BaseApiRequestHandler):
     """
     领取奖品
     """
 
     @tornado.web.authenticated
-    def post(self, aid, code):
+    def post(self, aid):
         uid = self.current_user
         pet = Pet.findone(uid=uid)
         # 如果没有领取
@@ -105,6 +146,12 @@ class AwardsCodeHandler(BaseApiRequestHandler):
             result = dict(code=40022, msg=u'奖品已经下线,请联系客服哦')
             return self.jsonify(result)
 
+        key = 'aid:{}'.format(award['id'])
+        if int(rdb.llen(key)) == 0:
+            self.set_status(400)
+            result = dict(code=40022, msg=u'奖品已经领取完')
+            return self.jsonify(result)
+
         # 所需点数大于当前点数,无法领取
         if award['score'] > pet['score']:
             self.set_status(400)
@@ -113,13 +160,16 @@ class AwardsCodeHandler(BaseApiRequestHandler):
 
         # 领取扣除点数
         if Pet.wining(uid=uid, aid=award['id'], score=award['score'], code=code):
+            award_code = rdb.lpop(key)
             logger.info("insert winning success")
-            result = dict(code=40027, msg=u'兑换成功!')
+            result = dict(code=40027, msg=u'兑换成功!', award_code=award_code, provide=award['provide'])
         else:
             logger.warning('insert wining failed')
             self.set_status(500)
             result = dict(code=40012, msg=u'更新服务器错误, 请稍后重试!')
 
+        # TODO test code
+        # result = dict(code=40027, msg=u'兑换成功!', award_code='11111', provide='provide')
         return self.jsonify(result)
 
 

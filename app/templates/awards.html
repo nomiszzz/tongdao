@@ -21,7 +21,7 @@
     <img src="/static/images/pic35.jpg">
     <ul class="prolist">
       {% for ad in awards %}
-      <li data-code="{{ ad['code'] }}" data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}">
+      <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}">
 
         <div class="proDetial">
           {{ ad['name'] }}
@@ -51,36 +51,21 @@
 </div>
 <script type="text/javascript">
   $(document).ready(function () {
-    var score = 0;
-    var code = '';
-    var provide = '';
-    var aid = ''
-    $(".prolist li").bind("click", function () {
-      score = parseInt($(this).find('em').text());
-      code = $(this).attr('data-code');
-      provide = $(this).attr('data-provide');
-      aid = $(this).attr('data-aid');
-      $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
-      $(".textBox .name").text('活动奖品有' + provide + '商家提供');
-      $(".textBox p").text('兑换码：' + code);
-      $(".window").show();
-    });
 
-    $(".textBox .cost").bind("click", function () {
-      $(this).parent().hide();
-      $(this).parent().next().show();
-    });
-    $(".close").bind("click", function () {
-      $(".window").hide();
-      $(".textBox").find("div").eq(0).show();
-      $(".textBox").find("div").eq(1).hide();
+    $(".prolist li").bind("click", function () {
+      var score = parseInt($(this).find('em').text());
+      aid = $(this).attr('data-aid');
+
       // 请求兑换接口
       $.ajax({
         async: true,
-        url: "/awards/" + aid + "/code/" + code,
+        url: "/awards/" + aid,
         type: 'post',
         success: function (resp){
-          alert("兑换成功");
+          $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
+          $(".textBox .name").text('活动奖品有' + resp.provide + '商家提供');
+          $(".textBox p").text('兑换码：' + resp.award_code);
+          $(".window").show();
         },
         error: function(XMLHttpResponse, textStatus){
           console.log(XMLHttpResponse)
@@ -92,8 +77,16 @@
           alert(body.msg)
         }
       })
+    });
 
-
+    $(".textBox .cost").bind("click", function () {
+      $(this).parent().hide();
+      $(this).parent().next().show();
+    });
+    $(".close").bind("click", function () {
+      $(".window").hide();
+      $(".textBox").find("div").eq(0).show();
+      $(".textBox").find("div").eq(1).hide();
     });
 
     /*轮播*/
