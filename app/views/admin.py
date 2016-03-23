@@ -334,3 +334,12 @@ class AdminWinningsHandler(AdminBaseHandler):
         for wn in winnings:
             wn['nickname'] = wn['nickname'].decode('unicode-escape')
         self.render('admin-winnings.html', winnings=winnings)
+
+
+@router.Route('/admin/awards/upload')
+class AdminUploadHandler(AdminBaseHandler):
+
+    @admin_require
+    def get(self, *args, **kwargs):
+
+        self.render('admin-award-upload.html')

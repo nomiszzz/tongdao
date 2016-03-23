@@ -12,7 +12,7 @@ from app.libs.torndb import Connection
 
 
 define('env', default='dev')
-define('port', default=9999)
+define('port', default=7999)
 options.parse_command_line()
 
 port = options.port

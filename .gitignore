@@ -68,6 +68,8 @@ target/
 #Ipython Notebook
 .ipynb_checkpoints
 
+/conf
+/config
 venv/
 /tmp
 /conf/nginx.conf
