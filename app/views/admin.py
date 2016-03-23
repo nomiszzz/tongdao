@@ -256,6 +256,8 @@ class AwardHandler(AdminBaseHandler):
 class AdminAwardHandler(AdminBaseHandler):
     @admin_require
     def get(self):
+
+
         self.render('admin-award-add.html')
 
     @admin_require
@@ -336,10 +338,12 @@ class AdminWinningsHandler(AdminBaseHandler):
         self.render('admin-winnings.html', winnings=winnings)
 
 
-@router.Route('/admin/awards/upload')
+@router.Route('/admin/award/(?P<aid>\d+)/upload')
 class AdminUploadHandler(AdminBaseHandler):
+    @admin_require
+    def get(self, aid):
+        self.render('admin-award-upload.html', aid=aid)
 
     @admin_require
-    def get(self, *args, **kwargs):
-
-        self.render('admin-award-upload.html')
+    def post(self, aid):
+        self.finish('post')

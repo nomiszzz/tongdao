@@ -24,7 +24,6 @@ class Award(Model):
     image = String(length=20, nullable=True)
     score = Integer(length=8, default=0)
     status = Integer(length=8, default=0)
-    code = String(length=20)
 
 
 class Winning(Model):
