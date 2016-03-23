@@ -4,12 +4,13 @@
 __author__ = 'ghost'
 
 import os
+import csv
 import time
 from app.models.auth import Admin
 from app.models.admin import Banner, Award, Winning
 from app.helper import AdminBaseHandler, admin_require, encrypt_password, parse_file_extension
 from app.libs import router
-from settings import logger, config
+from settings import logger, config, rdb
 
 
 @router.Route('/admin')
@@ -183,6 +184,10 @@ class AdminAwardsHandler(AdminBaseHandler):
     @admin_require
     def get(self, *args, **kwargs):
         awards = Award.findall()
+        for ad in awards:
+            key = 'aid:{}'.format(ad['id'])
+            counts = rdb.llen(key)
+            setattr(ad, 'counts', counts)
         self.render('admin-awards.html', awards=awards)
 
 
@@ -256,8 +261,6 @@ class AwardHandler(AdminBaseHandler):
 class AdminAwardHandler(AdminBaseHandler):
     @admin_require
     def get(self):
-
-
         self.render('admin-award-add.html')
 
     @admin_require
@@ -346,4 +349,36 @@ class AdminUploadHandler(AdminBaseHandler):
 
     @admin_require
     def post(self, aid):
-        self.finish('post')
+
+        # 图片上传
+        if self.request.files:
+            files_body = self.request.files['file']
+            file_ = files_body[0]
+            # 文件扩展名处理
+            file_extension = parse_file_extension(file_)
+
+            # 新建上传目录
+            base_dir = config.UPLOADS_DIR['csv_dir']
+            if not os.path.exists(base_dir):
+                os.makedirs(base_dir)
+            logger.info('new dir ---------- {}'.format(base_dir))
+
+            new_file_name = '{}{}'.format(time.time(), file_extension)
+            new_file = os.path.join(base_dir, new_file_name)
+
+            # 备份以前上传的文件
+            if os.path.isfile(new_file):
+                bak_file_name = '{}bak{}'.format(time.time(), file_extension)
+                bak_file = os.path.join(base_dir, bak_file_name)
+                os.rename(new_file, bak_file)
+
+            # 写入文件
+            with open(new_file, 'w') as w:
+                w.write(file_['body'])
+
+            key = 'aid:{}'.format(aid)
+            with open(new_file, 'r') as f:
+                for line in csv.reader(f):
+                    row =  rdb.lpush(key, line[0])
+                    logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
+        self.redirect('/admin/awards')

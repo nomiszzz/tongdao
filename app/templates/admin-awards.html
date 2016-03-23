@@ -30,7 +30,7 @@
           <td class="text-center">{{ award['name'] }}</td>
           <td class="text-center">{{ award['provide'] }}</td>
           <th class="text-center">{{ award['score'] }}</th>
-          <th class="text-center">五</th>
+          <th class="text-center">{{ award['counts'] }}</th>
           <td class="text-center"><a href="{{ award['image'] }}">查看图片</a></td>
           <td class="text-center">
             {% if award['status'] == 1 %}

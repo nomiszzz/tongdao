@@ -47,5 +47,6 @@ WEIXIN = {
 
 UPLOADS_DIR = {
     'banner_dir': '~/tongdao/app/static/uploads/banner',
-    'award_dir': '~/tongdao/app/static/uploads/award'
+    'award_dir': '~/tongdao/app/static/uploads/award',
+    'csv_dir': '/Users/ghost/Rsj217/tongdao/app/static/uploads/csv'
 }
