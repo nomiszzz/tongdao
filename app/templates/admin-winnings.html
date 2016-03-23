@@ -16,7 +16,6 @@
         <th class="text-center">奖品</th>
         <th class="text-center">查看奖品图片</th>
         <th class="text-center">兑换码</th>
-        <th class="text-center">是否兑换了</th>
       </tr>
       </thead>
       <tbody>
@@ -28,13 +27,6 @@
           <td class="text-center">{{ wg['award_name'] }}</td>
           <th class="text-center"><a href="{{ wg['award_image'] }}">查看奖品图片</a></th>
           <th class="text-center">{{ wg['code'] }}</th>
-          <th class="text-center">
-            {% if wg['status'] == 0 %}
-            尚未兑换
-            {% else %}
-            已经兑换
-            {% end %}
-          </th>
         </tr>
         {% end %}
       {% else %}
