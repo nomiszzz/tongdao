@@ -27,6 +27,8 @@ img { border: 0; max-width: 100%; display: block;}
 a { text-decoration: none; }
 a:hover { text-decoration: none; }
 
+body{background-color:#ffce09}
+
 .eventGround{width:100%;height:auto;overflow: hidden;margin:0 auto;position: absolute;top:0;left:0;}
 .eventGround img{width: 100%;}
 .eventGround .contain{width: 100%;height: auto;margin: 0 auto;overflow: hidden;position: relative;}
