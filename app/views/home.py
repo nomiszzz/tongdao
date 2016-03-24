@@ -72,7 +72,7 @@ class PetHandler(BaseRequestHandler):
 
 @router.Route('/awards')
 class AwardsHandler(BaseRequestHandler):
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self, *args, **kwargs):
         awards = Award.findall(status=1)
         banners = Banner.findall(status=1)
