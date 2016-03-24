@@ -382,3 +382,13 @@ class AdminUploadHandler(AdminBaseHandler):
                     row =  rdb.lpush(key, line[0])
                     logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
         self.redirect('/admin/awards')
+
+@router.Route('/admin/award/(?P<aid>\d+)/codes')
+class AdminCodesHandler(AdminBaseHandler):
+
+    @admin_require
+    def get(self, aid):
+        key = 'aid:{}'.format(aid)
+        end = rdb.llen(key)
+        codes = rdb.lrange(key, 0, end)
+        self.render('admin-award-codes.html', codes=codes)

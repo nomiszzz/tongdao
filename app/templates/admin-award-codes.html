@@ -1,0 +1,30 @@
+{% extends "adminbase.html" %}
+{% block title %}奖品列表{% end %}
+{% block main %}
+<div class="row">
+  <br/>
+  <br/>
+  <br/>
+  <div class="col-md-8 col-md-push-2">
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th class="text-center">序号</th>
+        <th class="text-center">兑换码</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% if codes %}
+        {% for index, code in enumerate(codes, 1) %}
+        <tr>
+          <td class="text-center">{{ index }}</td>
+          <td class="text-center">{{ code }}</td>
+        </tr>
+        {% end %}
+      {% end %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% end %}
