@@ -6,7 +6,7 @@ __author__ = 'ghost'
 import os
 import csv
 import time
-from app.models.auth import Admin
+from app.models.auth import Admin, User
 from app.models.admin import Banner, Award, Winning
 from app.helper import AdminBaseHandler, admin_require, encrypt_password, parse_file_extension
 from app.libs import router
@@ -392,3 +392,13 @@ class AdminCodesHandler(AdminBaseHandler):
         end = rdb.llen(key)
         codes = rdb.lrange(key, 0, end)
         self.render('admin-award-codes.html', codes=codes)
+
+@router.Route('/admin/users')
+class AdminUsersHandler(AdminBaseHandler):
+
+    @admin_require
+    def get(self, *args, **kwargs):
+        users = User.findall()
+        for user in users:
+            user['nickname'] = user['nickname'].decode('unicode-escape')
+        self.render('admin-users.html', users=users)

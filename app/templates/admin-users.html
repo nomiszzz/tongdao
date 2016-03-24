@@ -1,0 +1,37 @@
+{% extends "adminbase.html" %}
+{% block title %}奖品列表{% end %}
+{% block main %}
+<div class="row">
+  <br/>
+  <br/>
+  <br/>
+  <div class="col-md-8 col-md-push-2">
+    <button class="btn btn-mini btn-warning" type="button"><a href="/admin/award/add">添加</a></button>
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th class="text-center">序号</th>
+        <th class="text-center">昵称</th>
+        <th class="text-center">头像地址</th>
+        <th class="text-center">openid</th>
+        <th class="text-center">授权时间</th>
+
+      </tr>
+      </thead>
+      <tbody>
+      {% if users %}
+        {% for user in users %}
+        <tr>
+          <td class="text-center">{{ user['id'] }}</td>
+          <td class="text-center">{{ user['nickname'] }}</td>
+          <td class="text-center"><a href="{{ user['avatar'] }}">查看头像</a></td>
+          <th class="text-center">{{ user['created_at'] }}</th>
+        </tr>
+        {% end %}
+      {% end %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% end %}

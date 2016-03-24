@@ -14,7 +14,8 @@ class User(Model):
     openid = String(length=60, nullable=True)
     nickname = String(length=20, nullable=True)
     avatar = String(length=150, nullable=True)
-    created_at = Time(length=20)
+    created_at = Time(length=20, nullable=True)
+
 
     def __repr__(self):
         return '<User {}>'.format(self.nickname)
