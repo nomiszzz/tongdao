@@ -128,7 +128,7 @@ class AwardsCodeHandler(BaseApiRequestHandler):
     领取奖品
     """
 
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def post(self, aid):
         uid = self.current_user
         pet = Pet.findone(uid=uid)
