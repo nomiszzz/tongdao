@@ -12,9 +12,9 @@
     </div>
     <div class="contain">
         <img src="/static/images/pic26.jpg"/>
-        <span id="feed" class="action">+<em>2</em></span>
-        <span id="bath" class="action">+<em>3</em></span>
-        <span id="game" class="action">+<em>5</em></span>
+        <span id="feed" class="action">+<em>2<br>yum！好好吃~</em></span>
+        <span id="bath" class="action">+<em>3<br>洗香香玩抱抱~</em></span>
+        <span id="game" class="action">+<em>5</em><br>呀~轻一点啦！</span>
         <img class="star"  src="/static/images/{{ user_join_pet_info['type'] }}.png"/>
 
         <!--<img class="star aquarius"  src="/static/images/shuiping.png"/>-->
@@ -100,7 +100,7 @@
             alert(resp.msg);
             return
           }else{
-            $(selecotr).animate({top:'-30%',opacity:"1"}, 3000);
+            $(selecotr).animate({top:'60%',opacity:'1'},500).animate({top:'-30%',opacity:"1"},4500);
             scores +=num;
             $(".scores span").html(scores);
           }
