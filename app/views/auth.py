@@ -71,11 +71,13 @@ class CallbackHandler(BaseRequestHandler):
 
         user = User.findone(openid=openid)
         if user:
+            uid = user['id']
             # 更新旧用户
             user.nickname = nickname
             user.avatar = avatar
             try:
                 row = user.update()
+
             except Exception, e:
                 logger.error('update user error {}'.format(e))
                 self.set_status(500)
@@ -86,6 +88,7 @@ class CallbackHandler(BaseRequestHandler):
             user = User(nickname=nickname, avatar=avatar, openid=openid, sex=sex)
             try:
                 row = user.insert()
+                uid = row
                 logger.info('insert user success {}'.format(row))
             except Exception, e:
                 logger.error('insert user error {}'.format(e))
@@ -93,8 +96,10 @@ class CallbackHandler(BaseRequestHandler):
                 self.redirect('/error')
                 return
 
+        logger.info('user id {}'.format(row))
+
         # 存储session
-        self.session['uid'] = row
+        self.session['uid'] = uid
         self.session['openid'] = openid
         self.session.save()
 
