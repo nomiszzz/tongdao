@@ -3,137 +3,137 @@
 {% block main %}
 <div class="eventGround" id="baby">
 
-    <div class="contain">
-        <img src="/static/images/pic25.jpg"/>
-        <span class="userPic"><img src="{{ user_join_pet_info['avatar'] }}"/></span>
-        <p class="userName">{{ user_join_pet_info['nickname'] }}
-          <em class="{% if user_join_pet_info['sex'] == 1 %}male{% else %}female{% end %}"></em>
-        </p>
-    </div>
-    <div class="contain">
-        <img src="/static/images/pic26.jpg"/>
-        <span id="feed" class="action">+<em>2</em></span>
-        <span id="bath" class="action">+<em>3</em></span>
-        <span id="game" class="action">+<em>5</em></span>
-        <img class="star"  src="/static/images/{{ user_join_pet_info['type'] }}.png"/>
+  <div class="contain">
+    <img src="/static/images/pic25.jpg"/>
+    <span class="userPic"><img src="{{ user_join_pet_info['avatar'] }}"/></span>
+    <p class="userName">{{ user_join_pet_info['nickname'] }}
+      <em class="{% if user_join_pet_info['sex'] == 1 %}male{% else %}female{% end %}"></em>
+    </p>
+  </div>
+  <div class="contain">
+    <img src="/static/images/pic26.jpg"/>
+    <span id="feed" class="action">+<em>2</em><br>yum！好好吃~</span>
+    <span id="bath" class="action">+<em>3</em><br>洗香香玩抱抱</span>
+    <span id="game" class="action">+<em>5</em><br>呀~轻一点啦！</span>
+    <img class="star" src="/static/images/{{ user_join_pet_info['type'] }}.png"/>
 
-        <!--<img class="star aquarius"  src="/static/images/shuiping.png"/>-->
-        <!--<img class="star libra" src="/static/images/tiancheng.png">-->
-        <!--<img class="star gemini" src="/static/images/shuangzi.png">-->
-        <!--<img class="star pisces" src="/static/images/shuangyu.png">-->
-        <!--<img class="star scorpio" src="/static/images/tianxie.png">-->
-        <!--<img class="star cancer" src="/static/images/juxie.png">-->
-        <!--<img class="star leo" src="/static/images/shizi.png">-->
-        <!--<img class="star sagittarius" src="/static/images/sheshou.png">-->
-        <!--<img class="star aries" src="/static/images/baiyang.png">-->
-        <!--<img class="star taurus" src="/static/images/jinniu.png">-->
-        <!--<img class="star virgo" src="/static/images/chunv.png">-->
-        <!--<img class="star capricorn" src="/static/images/mojie.png">-->
-    </div>
-    <img src="/static/images/pic27.jpg">
-    <ul>
-        <li class="li5">
-            <img src="/static/images/pic28.jpg">
-            <img class="done" src="/static/images/pic28_1.jpg">
-        </li>
-        <li class="li6">
-            <img src="/static/images/pic29.jpg">
-            <img class="done" src="/static/images/pic29_1.jpg">
-        </li>
-        <li class="li5">
-            <img src="/static/images/pic30.jpg">
-            <img class="done" src="/static/images/pic30_1.jpg">
-        </li>
-    </ul>
-    <div class="contain">
-        <img src="/static/images/pic31.jpg">
-        <p class="scores"><span>{{ user_join_pet_info['score'] }}</span><a href="/awards"></a></p>
+    <!--<img class="star aquarius"  src="/static/images/shuiping.png"/>-->
+    <!--<img class="star libra" src="/static/images/tiancheng.png">-->
+    <!--<img class="star gemini" src="/static/images/shuangzi.png">-->
+    <!--<img class="star pisces" src="/static/images/shuangyu.png">-->
+    <!--<img class="star scorpio" src="/static/images/tianxie.png">-->
+    <!--<img class="star cancer" src="/static/images/juxie.png">-->
+    <!--<img class="star leo" src="/static/images/shizi.png">-->
+    <!--<img class="star sagittarius" src="/static/images/sheshou.png">-->
+    <!--<img class="star aries" src="/static/images/baiyang.png">-->
+    <!--<img class="star taurus" src="/static/images/jinniu.png">-->
+    <!--<img class="star virgo" src="/static/images/chunv.png">-->
+    <!--<img class="star capricorn" src="/static/images/mojie.png">-->
+  </div>
+  <img src="/static/images/pic27.jpg">
+  <ul>
+    <li class="li5">
+      <img src="/static/images/pic28.jpg">
+      <img class="done" src="/static/images/pic28_1.jpg">
+    </li>
+    <li class="li6">
+      <img src="/static/images/pic29.jpg">
+      <img class="done" src="/static/images/pic29_1.jpg">
+    </li>
+    <li class="li5">
+      <img src="/static/images/pic30.jpg">
+      <img class="done" src="/static/images/pic30_1.jpg">
+    </li>
+  </ul>
+  <div class="contain">
+    <img src="/static/images/pic31.jpg">
+    <p class="scores"><span>{{ user_join_pet_info['score'] }}</span><a href="/awards"></a></p>
 
-    </div>
+  </div>
 </div>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("#btn1").on("click",function(){
-            $("#choose").show();
-        });
-        $("#choose nav span").bind("click",function(){
-            var value = $(this).attr("data-constellation");
-            $("#baby").show();
-            var value = "."+value;
-            $(value).show();
-        });
-        $("ul li").bind("click",function(){
-            $(this).find(".done").css("z-index","1");
-            var _index = $(this).index();
-            switch(_index){
-                case 0:
-                    var num = parseInt($("#feed").find("em").html());
-                    var scores =parseInt($(".scores span").html());
-                    var url = '/api/v1/keep?type=eat';
-                    request(url, scores, num, "#feed");
-                    break;
-                case 1:
-                    var num = parseInt($("#bath").find("em").html());
-                    var scores =parseInt($(".scores span").html());
-                    var url = '/api/v1/keep?type=wash';
-                    request(url, scores, num, "#bath");
-                    break;
-                case 2:
-                    var num = parseInt($("#game").find("em").html());
-                    var scores =parseInt($(".scores span").html());
-                    var url = '/api/v1/keep?type=game';
-                    request(url, scores, num, "#game");
-                    break;
-            }
-            $(this).unbind("click");
-        });
+  $(document).ready(function () {
+    $("#btn1").on("click", function () {
+      $("#choose").show();
     });
+    $("#choose nav span").bind("click", function () {
+      var value = $(this).attr("data-constellation");
+      $("#baby").show();
+      var value = "." + value;
+      $(value).show();
+    });
+    $("ul li").bind("click", function () {
+      $(this).find(".done").css("z-index", "1");
+      var _index = $(this).index();
+      switch (_index) {
+        case 0:
+          var num = parseInt($("#feed").find("em").html());
+          var scores = parseInt($(".scores span").html());
+          var url = '/api/v1/keep?type=eat';
+          request(url, scores, num, "#feed");
+          break;
+        case 1:
+          var num = parseInt($("#bath").find("em").html());
+          var scores = parseInt($(".scores span").html());
+          var url = '/api/v1/keep?type=wash';
+          request(url, scores, num, "#bath");
+          break;
+        case 2:
+          var num = parseInt($("#game").find("em").html());
+          var scores = parseInt($(".scores span").html());
+          var url = '/api/v1/keep?type=game';
+          request(url, scores, num, "#game");
+          break;
+      }
+      $(this).unbind("click");
+    });
+  });
 
 
-    function request(url, scores, num, selecotr){
-      $.ajax({
-        async: true,
-        url: url,
-        type: 'get',
-        success: function (resp){
-          if (resp.code == 40010){
-            alert(resp.msg);
-            return
-          }else{
-            $(selecotr).animate({top:'-30%',opacity:"1"}, 3000);
-            scores +=num;
-            $(".scores span").html(scores);
-          }
-        },
-        error: function(XMLHttpResponse, textStatus){
-          console.log(XMLHttpResponse)
-          var status_code = XMLHttpResponse.status;
-          var body = JSON.parse(XMLHttpResponse.responseText);
-          alert(body.msg)
+  function request(url, scores, num, selecotr) {
+    $.ajax({
+      async: true,
+      url: url,
+      type: 'get',
+      success: function (resp) {
+        if (resp.code == 40010) {
+          alert(resp.msg);
+          return
+        } else {
+          $(selecotr).animate({top: '60%', opacity: '1'}, 500).animate({top: '-30%', opacity: "1"}, 4500);
+          scores += num;
+          $(".scores span").html(scores);
         }
-      })
-    }
+      },
+      error: function (XMLHttpResponse, textStatus) {
+        console.log(XMLHttpResponse);
+        var status_code = XMLHttpResponse.status;
+        var body = JSON.parse(XMLHttpResponse.responseText);
+        alert(body.msg)
+      }
+    })
+  }
 
-   /* //添加cookie
-    function addCookie(name,value,expiresHours){
-        var cookieString=name+"="+escape(value);
-        //判断是否设置过期时间
-        if(expiresHours>0){
-        var date=new Date();
-        date.setTime(date.getTime+expiresHours*3600*1000);
-        cookieString=cookieString+"; expires="+date.toGMTString();
-        }
-        document.cookie=cookieString;
-    }
-    //获取指定名称的cookie值
-    function getCookie(name){
-        var strCookie=document.cookie;
-        var arrCookie=strCookie.split("; ");
-        for(var i=0;i<arrCookie.length;i++){
-        var arr=arrCookie[i].split("=");
-        if(arr[0]==name)return arr[1];
-        }
-        return "";
-    }*/
+  /* //添加cookie
+   function addCookie(name,value,expiresHours){
+   var cookieString=name+"="+escape(value);
+   //判断是否设置过期时间
+   if(expiresHours>0){
+   var date=new Date();
+   date.setTime(date.getTime+expiresHours*3600*1000);
+   cookieString=cookieString+"; expires="+date.toGMTString();
+   }
+   document.cookie=cookieString;
+   }
+   //获取指定名称的cookie值
+   function getCookie(name){
+   var strCookie=document.cookie;
+   var arrCookie=strCookie.split("; ");
+   for(var i=0;i<arrCookie.length;i++){
+   var arr=arrCookie[i].split("=");
+   if(arr[0]==name)return arr[1];
+   }
+   return "";
+   }*/
 </script>
 {% end %}
