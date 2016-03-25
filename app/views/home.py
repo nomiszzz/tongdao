@@ -72,7 +72,7 @@ class PetHandler(BaseRequestHandler):
 
 @router.Route('/awards')
 class AwardsHandler(BaseRequestHandler):
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self, *args, **kwargs):
         awards = Award.findall(status=1)
         banners = Banner.findall(status=1)
@@ -105,7 +105,7 @@ class AwardsCodeHandler(BaseApiRequestHandler):
         key = 'aid:{}'.format(award['id'])
         if int(rdb.llen(key)) == 0:
             self.set_status(400)
-            result = dict(code=40022, msg=u'奖品已经领取完')
+            result = dict(code=40022, msg=u'奖品已经领取完或者活动已下线哦')
             return self.jsonify(result)
 
         # # 所需点数大于当前点数,无法领取
