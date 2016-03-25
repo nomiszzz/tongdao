@@ -12,6 +12,7 @@ class User(Model):
 
     id = Integer(length=8, primary_key=True, nullable=False, auto_increment=True, updateable=False)
     openid = String(length=60, nullable=True)
+    sex = Integer(length=1, nullable=True)
     nickname = String(length=20, nullable=True)
     avatar = String(length=150, nullable=True)
     created_at = Time(length=20, nullable=True)
@@ -22,7 +23,7 @@ class User(Model):
 
     @classmethod
     def get_info(cls):
-        return cls.raw_query("SELECT u.id, u.openid, u.nickname, u.avatar,u.sex, p.type, p.score "
+        return cls.raw_query("SELECT u.id, u.openid, u.nickname, u.avatar, u.created_at, u.sex, p.type, p.score "
                            "FROM user u JOIN pet p ON u.id=p.uid ")
 
 class Admin(Model):
