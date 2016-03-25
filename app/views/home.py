@@ -14,10 +14,9 @@ from settings import logger, rdb
 
 @router.Route('/home')
 class HomeHandler(BaseRequestHandler):
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self, *args, **kwargs):
         uid = self.current_user
-        uid = 1
         # 如果尚未领取,重定向领取列表
         if not has_pet_cache(uid) and not Pet.findone(uid=uid):
             return self.redirect('/pets')
