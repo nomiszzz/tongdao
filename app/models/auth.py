@@ -22,7 +22,7 @@ class User(Model):
 
     @classmethod
     def get_info(cls):
-        return cls.raw_get("SELECT u.id, u.openid, u.nickname, u.avatar,u.sex, p.type, p.score "
+        return cls.raw_query("SELECT u.id, u.openid, u.nickname, u.avatar,u.sex, p.type, p.score "
                            "FROM user u JOIN pet p ON u.id=p.uid ")
 
 class Admin(Model):
