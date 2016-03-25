@@ -398,7 +398,7 @@ class AdminUsersHandler(AdminBaseHandler):
 
     @admin_require
     def get(self, *args, **kwargs):
-        users = User.findall()
+        users = User.get_info()
         for user in users:
             user['nickname'] = user['nickname'].decode('unicode-escape')
         self.render('admin-users.html', users=users)

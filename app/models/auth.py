@@ -20,6 +20,10 @@ class User(Model):
     def __repr__(self):
         return '<User {}>'.format(self.nickname)
 
+    @classmethod
+    def get_info(cls):
+        return cls.raw_get("SELECT u.id, u.openid, u.nickname, u.avatar,u.sex, p.type, p.score "
+                           "FROM user u JOIN pet p ON u.id=p.uid ")
 
 class Admin(Model):
     __table__ = 'admin'
