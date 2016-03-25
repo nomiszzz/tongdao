@@ -24,6 +24,7 @@
           <td class="text-center">{{ user['id'] }}</td>
           <td class="text-center">{{ user['nickname'] }}</td>
           <td class="text-center"><a href="{{ user['avatar'] }}">查看头像</a></td>
+          <td class="text-center"><a href="/static/images/{{ user['type'] }}.png">查看宝贝</a></td>
           <th class="text-center">{{ user['openid'] }}</th>
           <th class="text-center">{{ user['created_at'] }}</th>
         </tr>
