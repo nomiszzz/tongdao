@@ -1,18 +1,27 @@
 {% extends "base.html" %}
 {% block title %}奖品{% end %}
 {% block style %}
-<link rel="stylesheet" href="http://7xkf6a.com2.z0.glb.qiniucdn.com/css/index-ddea3887ce.css">{% end %}
+<link rel="stylesheet" href="http://7xkf6a.com2.z0.glb.qiniucdn.com/css/index-ddea3887ce.css">
+{% end %}
+
+{% block script %}
+<script type="text/javascript" src="/static/js/slider-H5.js"></script>
+{% end %}
+
+
 {% block main %}
 <div class="eventGround">
   <div class="contain">
     <img src="/static/images/pic32.jpg">
-    <a class="back" href=""><img src="/static/images/back.png"></a>
+    <a class="back" href="/home"><img src="/static/images/back.png"></a>
   </div>
   <div class="contain" id="change">
     <div class="imgBox">
+      <ul>
       {% for bn in banners %}
-      <img src="{{ bn['image'] }}">
+      <li><img src="{{ bn['image'] }}"></li>
       {% end %}
+      </ul>
     </div>
   </div>
 
@@ -24,7 +33,7 @@
       <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}">
 
         <div class="proDetial">
-          {{ ad['name'] }}
+          <strong>{{ ad['provide'] }}</strong>{{ ad['name'] }}
           <span class="cost"><em>{{ ad['score'] }}</em>点</span>
         </div>
         <img src="{{ ad['image'] }}">
@@ -90,72 +99,15 @@
     });
 
     /*轮播*/
-    var width = window.screen.width;
-
-    var height = width * 0.4;
-
-    $("#change").height(height);
-
-    $("#change").width(width);
-
-    $(".imgBox").width(width * 3);
-
-    $(".imgBox").height(height);
-    $(".imgBox img").width(width);
-
-    var flag = 0;
-    var timer;
-    tt();
-    function tt() {
-      var _args = arguments;
-      timer = setTimeout(function () {
-
-        imgScroll(1);
-        _args.callee();
-      }, 2000);
-    }
-
-
-    function imgScroll(dir) {
-      if (flag < 2 && dir == 1) {
-        var left = parseInt($(".imgBox").css("left"));
-        left = (left - width) + "px";
-        $(".imgBox").animate({left: left}, 500);
-        flag++;
-      }
-      else if (flag > 0 && dir == -1) {
-        var left = parseInt($(".imgBox").css("left"));
-        left = (left + width) + "px";
-        $(".imgBox").animate({left: left}, 500);
-        flag--;
-      }
-      else {
-        $(".imgBox").animate({left: "0px"}, 500);
-        flag = 0;
-      }
-    }
-
-    var preX;
-    $(".imgBox").on("touchstart", function (e) {
-      var currX = e.originalEvent.changedTouches[0].clientX;
-
-      preX = currX;
-
-    })
-
-    $(".imgBox").on("touchend", function (e) {
-      var currX = e.originalEvent.changedTouches[0].clientX;
-      if (currX - preX > 0) {
-        console.log("right");
-        imgScroll(-1);
-      } else {
-        console.log("left");
-        imgScroll(1);
-      }
-      clearTimeout(timer);
-      tt();
-    })
-
+    var scrollImg = $.mggScrollImg('.imgBox ul',{
+        loop : true,
+        auto : true,
+        auto_wait_time:3000,
+        scroll_time:300,
+        callback : function(ind){
+            $('#page').text(ind+1);
+        }
+    });
   });
 </script>
 {% end %}

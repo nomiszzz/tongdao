@@ -10,7 +10,7 @@ outline: none;
 }
 input, textarea, button, a,span,li{ -webkit-tap-highlight-color:rgba(0,0,0,0); } 
 html { height: 101%; } /* always display scrollbars */
-body { font-size: 62.5%; line-height: 1; font-family: Arial, Tahoma, Verdana, sans-serif; }
+body { font-size: 62.5%; line-height: 1; font-family: Arial, Tahoma, Verdana, sans-serif; background-color: #ffce09}
 
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section { display: block; }
 ol, ul { list-style: none; }
@@ -27,8 +27,6 @@ img { border: 0; max-width: 100%; display: block;}
 a { text-decoration: none; }
 a:hover { text-decoration: none; }
 
-body{background-color:#ffce09}
-
 .eventGround{width:100%;height:auto;overflow: hidden;margin:0 auto;position: absolute;top:0;left:0;}
 .eventGround img{width: 100%;}
 .eventGround .contain{width: 100%;height: auto;margin: 0 auto;overflow: hidden;position: relative;}
@@ -38,20 +36,20 @@ body{background-color:#ffce09}
 .eventGround nav .li2{display: block;width: 26%;float: left;}
 .eventGround nav .li3{display: block;width: 28.8%;float: left;}
 .eventGround nav .li4{display: block;width: 27.2%;float: left;}
-/*#choose{display: none;}*/
+#choose{display: none;}
 .eventGround .contain .userPic{display: block;width: 18%;padding: 4px;background: #fff;border: 2px solid #000;border-radius: 50%;position: absolute;bottom: 0;left: 6%;z-index: 9}
     .eventGround .contain .userPic img{width: 100%;border-radius: 50%;}
     .eventGround .contain p.userName{position: absolute;bottom:22%;left:22%;font-size: 14px;line-height: 20px;background: #fff;color: #000;padding:0 4%;border: 2px solid #000;border-top-right-radius: 12px;border-bottom-right-radius: 12px;}
     .eventGround .contain .userName em{display: inline-block;width: 14px;height: 14px;vertical-align: text-bottom;margin-left: 6px;background-image: url(images/gender.png);background-repeat: no-repeat;}
     .female{background-position: 0 0;}
     .male{background-position: 0 -14px;}
-    .eventGround .contain .star{position: absolute;top:0;left:0;}
+    .eventGround .contain .star{position: absolute;top:0;left:0;display: none;}
     .eventGround ul{width: 100%;height: auto;overflow: hidden;position: relative;}
     .eventGround ul li{float: left;position: relative;cursor: pointer;}
     .li5{width: 30%}
     .li6{width: 40%}
     .eventGround ul li .done{position: absolute;top:0;left: 0;z-index: -1}
-    .eventGround .contain .action{display: block;position: absolute;top:36%;right:10%;z-index: 99;color: #fe1501;font-size: 30px;line-height: 30px;opacity: 0}
+    .eventGround .contain .action{display: block;position: absolute;top:70%;right:10%;z-index: 99;color: #fe1501;font-size: 30px;line-height: 30px;opacity: 0}
     .eventGround .contain .scores{font-size: 32px;line-height: 32px;color: #fe1501;position: absolute;top:32%;left:45%;}
     .eventGround .contain .scores a{display: inline-block;width: 30px;height: 32px;margin-left: 10px;background: url(images/price.png) no-repeat left top;vertical-align: text-top;animation: mymove 2s linear infinite  normal;margin-bottom: 0}
     @keyframes mymove
@@ -103,6 +101,37 @@ body{background-color:#ffce09}
     .window .textBox p{line-height: 30px;}
     .window .textBox .cost{display: block;width: 30%;margin: 2% auto;cursor: pointer;}
     .window .textBox .close{font-size: 16px;color: #000;background-color: #fff;border:1px solid #000;border-radius: 6px;}
-    #change .imgBox{width: 100%;top:0;left: 0;position: absolute;}
-    #change .imgBox img{display: block;float: left;}
+    
+
+
+    @media screen and (min-width:240px) {
+        html, body{
+            font-size:9px;
+        }
+    }
+    @media screen and (min-width:320px) {
+        html, body{
+            font-size:12px;
+        }
+    }
+    @media screen and (min-width:480px) {
+        html, body{
+        font-size:18px;
+        }
+    }
+    @media screen and (min-width:640px) {
+        html, body{
+            font-size:24px;
+        }
+    }
+    @media screen and (min-width:960px) {
+        html, body{
+            font-size:36px;
+        }
+    }
+    div.imgBox{width:100%;height:13.2rem;overflow:hidden;margin:0 auto;}
+    div.imgBox ul{clear:both;width:75rem;display: inline-block;}
+    div.imgBox ul li{float:left;width:33rem;height:13.2rem;overflow:hidden;text-align:center;}
+    div.imgBox ul li img{width:33rem;height:13.2rem;}
+    #change{height: 13.2rem}
 
