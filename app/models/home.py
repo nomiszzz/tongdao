@@ -41,6 +41,9 @@ class Pet(Model):
         """
         db._db.begin()
         status = True
+
+        logger.info('current score {}'.format(score))
+
         try:
             logger.warning('-------------开始事务--------------')
             db.execute("UPDATE pet SET score=score - %s WHERE uid=%s", score, uid)

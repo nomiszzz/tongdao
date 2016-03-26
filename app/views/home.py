@@ -87,7 +87,7 @@ class AwardsHandler(BaseRequestHandler):
             setattr(awd, 'count', count)
         banners = Banner.findall(status=1)
         logger.info('user {} current score {}'.format(uid, score))
-        self.render('awards.html', awards=awards, banners=banners, score=score)
+        self.render('awards.html', awards=awards, banners=banners)
 
 
 @router.Route('/awards/(?P<aid>\d+)')
@@ -119,9 +119,8 @@ class AwardsCodeHandler(BaseApiRequestHandler):
             result = dict(code=40022, msg=u'奖品已经领取完或者活动已下线哦')
             return self.jsonify(result)
 
-        # # 所需点数大于当前点数,无法领取
+        # 所需点数大于当前点数,无法领取
         if award['score'] > pet['score']:
-            self.set_status(400)
             result = dict(code=40022, msg=u'领取点数不符合哦')
             return self.jsonify(result)
 

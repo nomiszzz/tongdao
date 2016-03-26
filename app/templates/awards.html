@@ -10,6 +10,15 @@
 
 
 {% block main %}
+
+<div class="xwindow" style="display: none">
+  <div class="black"></div>
+  <div class="windowtxt">
+    <p>领取的点数不符合哦</p>
+    <span><img src="/static/images/ok.png"></span>
+  </div>
+</div>
+
 <div class="eventGround">
   <div class="contain">
     <img src="/static/images/pic32.jpg">
@@ -31,11 +40,14 @@
     <ul class="prolist">
       {% for ad in awards %}
       <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}">
-        {% if ad['count'] == 0 or ad['status'] == 0 or score < ad['score'] %}
+        {% if ad['count'] == 0 or ad['status'] == 0 %}
         <div class="proWin"></div>
         {% end %}
         <div class="proDetial">
-          <p style="height: 36px;overflow: hidden;"><strong>{{ ad['provide'] }}</strong>{{ ad['name'] }}</p>
+          <p style="height: 36px;overflow: hidden;">
+            <strong>{{ ad['provide'] }}</strong>
+            <strong class="award-name">{{ ad['name'] }}</strong>
+          </p>
           <span class="cost"><em>{{ ad['score'] }}</em>点</span>
         </div>
         <img src="{{ ad['image'] }}">
@@ -49,40 +61,54 @@
   <div class="textBox">
     <div>
       <span class="name"></span>
-      奖品说明<br>
-      这里是说明这里是说明这里是说明这里是说明这里是说明这里是说明
+      <p class="description">奖品说明</p>
       <p class="score">点击兑换后会扣除xxx点数哦！</p>
       <span class="cost"><img src="/static/images/cost.png"></span>
     </div>
-    <div style="display: none;">
-      <p class="code">兑换码：666666</p>
-      <span class="close cost">ok</span>
+
+    <div id="response" style="display: none;">
+      <p class="code" id="code">兑换码：666666</p>
+      <span class="close">ok</span>
     </div>
   </div>
 </div>
 <script type="text/javascript">
   $(document).ready(function () {
 
+    var score = 0;
+    var aid = 0;
     $(".prolist li").bind("click", function () {
       if ($(this).children('.proWin').length != 0) {
         return false;
       }
-      var score = parseInt($(this).find('em').text());
+      score = parseInt($(this).find('em').text());
       aid = $(this).attr('data-aid');
+      var provide = $(this).attr('data-provide');
+      var awardName = $(this).find('.award-name').text();
 
+      $(".textBox .name").text('活动奖品有' + provide + '商家提供');
+      $(".textBox .description").text(awardName);
+      $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
+      $(".window").show();
+    });
+
+    $(".textBox .cost").bind("click", function () {
+      $(this).parent().hide();
       // 请求兑换接口
       $.ajax({
         async: true,
         url: "/awards/" + aid,
         type: 'post',
         success: function (resp) {
-          $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
-          $(".textBox .name").text('活动奖品有' + resp.provide + '商家提供');
-          $(".textBox p").text('兑换码：' + resp.award_code);
-          $(".window").show();
+          if (resp.code == 40022) {
+            $("#code").text(resp.msg);
+          } else {
+            $("#code").text('兑换码：' + resp.award_code);
+          }
+          $('#response').show();
         },
         error: function (XMLHttpResponse, textStatus) {
-          console.log(XMLHttpResponse)
+          console.log(XMLHttpResponse);
           var status_code = XMLHttpResponse.status;
           if (status_code == 403) {
             window.location = '/auth/signin';
@@ -93,14 +119,12 @@
       })
     });
 
-    $(".textBox .cost").bind("click", function () {
-      $(this).parent().hide();
-      $(this).parent().next().show();
-    });
     $(".close").bind("click", function () {
       $(".window").hide();
       $(".textBox").find("div").eq(0).show();
-      $(".textBox").find("div").eq(1).hide();
+//      $(".textBox").find("div").eq(1).hide();
+      $('#response').hide();
+
     });
 
     /*轮播*/
