@@ -86,7 +86,7 @@ class AwardsHandler(BaseRequestHandler):
             count = int(rdb.llen(key)) if rdb.llen(key) else 0
             setattr(awd, 'count', count)
         banners = Banner.findall(status=1)
-        logger.info('current score {}'.format(score))
+        logger.info('user {} current score {}'.format(uid, score))
         self.render('awards.html', awards=awards, banners=banners, score=score)
 
 
@@ -167,7 +167,7 @@ class KeepHandler(BaseApiRequestHandler):
         if times == 1:
             rdb.expire(key, get_to_tomorrow())
         else:
-            logger.warning('have try times {}'.format(times))
+            logger.warning('user{} have try times {}'.format(uid, times))
             result = dict(code=40010, msg=u'每天只能{}一次哦!'.format(keep_info['name']))
             return self.jsonify(result)
 
