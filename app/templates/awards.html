@@ -18,9 +18,9 @@
   <div class="contain" id="change">
     <div class="imgBox">
       <ul>
-      {% for bn in banners %}
-      <li><img src="{{ bn['image'] }}"></li>
-      {% end %}
+        {% for bn in banners %}
+        <li><img src="{{ bn['image'] }}"></li>
+        {% end %}
       </ul>
     </div>
   </div>
@@ -31,7 +31,9 @@
     <ul class="prolist">
       {% for ad in awards %}
       <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}">
-
+        {% if ad['count'] == 0 or ad['status'] == 0 %}
+        <div class="proWin"></div>
+        {% end %}
         <div class="proDetial">
           <p style="height: 36px;overflow: hidden;"><strong>{{ ad['provide'] }}</strong>{{ ad['name'] }}</p>
           <span class="cost"><em>{{ ad['score'] }}</em>点</span>
@@ -70,16 +72,16 @@
         async: true,
         url: "/awards/" + aid,
         type: 'post',
-        success: function (resp){
+        success: function (resp) {
           $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
           $(".textBox .name").text('活动奖品有' + resp.provide + '商家提供');
           $(".textBox p").text('兑换码：' + resp.award_code);
           $(".window").show();
         },
-        error: function(XMLHttpResponse, textStatus){
+        error: function (XMLHttpResponse, textStatus) {
           console.log(XMLHttpResponse)
           var status_code = XMLHttpResponse.status;
-          if (status_code == 403){
+          if (status_code == 403) {
             window.location = '/auth/signin';
           }
           var body = JSON.parse(XMLHttpResponse.responseText);
@@ -99,14 +101,14 @@
     });
 
     /*轮播*/
-    var scrollImg = $.mggScrollImg('.imgBox ul',{
-        loop : true,
-        auto : true,
-        auto_wait_time:3000,
-        scroll_time:300,
-        callback : function(ind){
-            $('#page').text(ind+1);
-        }
+    var scrollImg = $.mggScrollImg('.imgBox ul', {
+      loop: true,
+      auto: true,
+      auto_wait_time: 3000,
+      scroll_time: 300,
+      callback: function (ind) {
+        $('#page').text(ind + 1);
+      }
     });
   });
 </script>
