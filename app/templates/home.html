@@ -1,6 +1,18 @@
 {% extends "base.html" %}
 {% block title %}我的宝宝{% end %}
 {% block main %}
+
+<!-- 弹窗-->
+
+<div class="xwindow" id="xwindow" style="display: none">
+  <div class="black"></div>
+  <div class="windowtxt">
+    <p>我要睡觉了<br>明天再来陪我玩哦</p>
+    <span id="sure"><img src="/static/images/ok.png"></span>
+  </div>
+</div>
+<!--弹窗结束-->
+
 <div class="eventGround" id="baby">
 
   <div class="contain">
@@ -53,6 +65,7 @@
 </div>
 <script type="text/javascript">
   $(document).ready(function () {
+
     $("#btn1").on("click", function () {
       $("#choose").show();
     });
@@ -62,6 +75,7 @@
       var value = "." + value;
       $(value).show();
     });
+
     $("ul li").bind("click", function () {
       $(this).find(".done").css("z-index", "1");
       var _index = $(this).index();
@@ -89,6 +103,9 @@
     });
   });
 
+  $('#sure').bind('click', function(){
+    $('#xwindow').hide();
+  });
 
   function request(url, scores, num, selecotr) {
     $.ajax({
@@ -97,7 +114,8 @@
       type: 'get',
       success: function (resp) {
         if (resp.code == 40010) {
-          alert(resp.msg);
+//          alert(resp.msg);
+          $('#xwindow').show();
           return
         } else {
           $(selecotr).animate({top: '60%', opacity: '1'}, 500).animate({top: '-30%', opacity: "1"}, 4500);
@@ -114,26 +132,6 @@
     })
   }
 
-  /* //添加cookie
-   function addCookie(name,value,expiresHours){
-   var cookieString=name+"="+escape(value);
-   //判断是否设置过期时间
-   if(expiresHours>0){
-   var date=new Date();
-   date.setTime(date.getTime+expiresHours*3600*1000);
-   cookieString=cookieString+"; expires="+date.toGMTString();
-   }
-   document.cookie=cookieString;
-   }
-   //获取指定名称的cookie值
-   function getCookie(name){
-   var strCookie=document.cookie;
-   var arrCookie=strCookie.split("; ");
-   for(var i=0;i<arrCookie.length;i++){
-   var arr=arrCookie[i].split("=");
-   if(arr[0]==name)return arr[1];
-   }
-   return "";
-   }*/
+
 </script>
 {% end %}

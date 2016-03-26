@@ -86,6 +86,7 @@ class AwardsHandler(BaseRequestHandler):
             count = int(rdb.llen(key)) if rdb.llen(key) else 0
             setattr(awd, 'count', count)
         banners = Banner.findall(status=1)
+        logger.info('current score {}'.format(score))
         self.render('awards.html', awards=awards, banners=banners, score=score)
 
 
