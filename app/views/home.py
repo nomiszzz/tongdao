@@ -173,7 +173,7 @@ class KeepHandler(BaseApiRequestHandler):
 
         try:
             row = Pet.keep(uid=uid, score=keep_info['score'])
-            logger.info('keep pet {}'.format(row))
+            logger.info('user {} keep pet {}'.format(uid, row))
         except Exception, e:
             self.set_status(500)
             logger.error('keep pet error {}'.format(e))
