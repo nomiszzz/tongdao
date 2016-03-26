@@ -72,15 +72,21 @@ class PetHandler(BaseRequestHandler):
 
 @router.Route('/awards')
 class AwardsHandler(BaseRequestHandler):
-    # @tornado.web.authenticated
+    @tornado.web.authenticated
     def get(self, *args, **kwargs):
+        uid = self.current_user
+        pet = Pet.findone(uid=uid)
+        if pet:
+            score = pet['score']
+        else:
+            score = 0
         awards = Award.findall()
         for awd in awards:
             key = 'aid:{}'.format(awd['id'])
             count = int(rdb.llen(key)) if rdb.llen(key) else 0
             setattr(awd, 'count', count)
         banners = Banner.findall(status=1)
-        self.render('awards.html', awards=awards, banners=banners)
+        self.render('awards.html', awards=awards, banners=banners, score=score)
 
 
 @router.Route('/awards/(?P<aid>\d+)')

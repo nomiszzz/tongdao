@@ -31,7 +31,7 @@
     <ul class="prolist">
       {% for ad in awards %}
       <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}">
-        {% if ad['count'] == 0 or ad['status'] == 0 %}
+        {% if ad['count'] == 0 or ad['status'] == 0 or score < ad['score'] %}
         <div class="proWin"></div>
         {% end %}
         <div class="proDetial">
@@ -64,6 +64,9 @@
   $(document).ready(function () {
 
     $(".prolist li").bind("click", function () {
+      if ($(this).children('.proWin').length != 0) {
+        return false;
+      }
       var score = parseInt($(this).find('em').text());
       aid = $(this).attr('data-aid');
 
