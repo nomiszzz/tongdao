@@ -25,7 +25,7 @@ class HomeHandler(BaseRequestHandler):
             return self.redirect('/pets')
 
         # 设置领养的缓存
-        set_pet_cache(uid)
+        # set_pet_cache(uid)
         # 获取领取用户信息
         user_join_pet_info = Pet.get_info(uid)
         if not user_join_pet_info:
