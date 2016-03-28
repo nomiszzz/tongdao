@@ -89,7 +89,7 @@ a:hover { text-decoration: none; }
     }
     .eventGround .contain .back{display: block;width: 13%;position:absolute;left: 5%;top:15%;}
     .eventGround .contain .prolist{width: 96%;padding: 2%;margin:0  auto;height: auto;overflow: hidden;position: absolute;top:0;left:2%;}
-    .eventGround .contain .prolist li{width: 49%;background-color:#fff;padding: 3%;position: relative;}
+    .eventGround .contain .prolist li{width: 49%;background-color:#fff;padding: 3%;position: relative; margin-bottom: 4%;}
 
     .eventGround .contain .prolist li .proWin{position: absolute;top:0;left: 0;height: 100%;width: 100%;}
     .eventGround .contain .prolist li .proWin div{width: 100%;height: 100%;background-color: #000;opacity: 0.7}
