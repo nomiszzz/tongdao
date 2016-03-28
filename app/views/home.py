@@ -80,7 +80,7 @@ class AwardsHandler(BaseRequestHandler):
             score = pet['score']
         else:
             score = 0
-        awards = Award.findall()
+        awards = Award.findall(status=1)
         for awd in awards:
             key = 'aid:{}'.format(awd['id'])
             count = int(rdb.llen(key)) if rdb.llen(key) else 0
