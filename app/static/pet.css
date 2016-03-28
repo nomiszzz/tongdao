@@ -90,18 +90,21 @@ a:hover { text-decoration: none; }
     .eventGround .contain .back{display: block;width: 13%;position:absolute;left: 5%;top:15%;}
     .eventGround .contain .prolist{width: 96%;padding: 2%;margin:0  auto;height: auto;overflow: hidden;position: absolute;top:0;left:2%;}
     .eventGround .contain .prolist li{width: 49%;background-color:#fff;padding: 3%;position: relative;}
-    .eventGround .contain .prolist li .proWin{position: absolute;top:0;left: 0;height: 100%;width: 100%;background-color: #000;opacity: 0.7}
+
+    .eventGround .contain .prolist li .proWin{position: absolute;top:0;left: 0;height: 100%;width: 100%;}
+    .eventGround .contain .prolist li .proWin div{width: 100%;height: 100%;background-color: #000;opacity: 0.7}
+    .eventGround .contain .prolist li .proWin p{font-size: 16px;line-height: 16px;color: #fff;position: absolute;right: 8%;top:50%;margin-top: -8px;}
     .eventGround .contain .prolist li:nth-child(2n){float: right;}
     .eventGround .contain .prolist li .proDetial{float: left;width:58%;font-size: 12px ;line-height: 18px;text-align: left;color: #86430f}
     .eventGround .contain .prolist li img{width: 40%;float: right;}
-    .eventGround .contain .prolist li .proDetial .cost{display: block;padding:0 1%;height: 18px;background-color: #ff0000;color: #fff;text-align: center;width:40%;margin-top: 4%;border-radius: 6px;}
+    .eventGround .contain .prolist li .proDetial .cost{display: block;padding:0 1%;height: 18px;background-color: #ff0000;color: #fff;text-align: center;width:80%;margin-top: 4%;border-radius: 6px;}
     .window{width: 100%;height: 100%;position: absolute;top:0;left: 0;display: none}
     .window .shadow{width: 100%;height: 100%;position: absolute;top:0;left: 0;background-color: #000;opacity: 0.85;}
     .window .textBox{width: 70%;height: auto;position: absolute;top:20%;left:50%;margin-left:-37%;background-color: #fff;border-radius: 6px;font-size: 14px;color: #000;line-height: 20px;text-align: center;padding: 4%}
     .window .textBox .name{display:block;width: 100%;text-align: center;line-height: 30px;margin-top: 2%;border-top:1px dotted #000;}
     .window .textBox p{line-height: 30px;}
     .window .textBox .cost{display: block;width: 30%;margin: 2% auto;cursor: pointer;}
-    .window .textBox .close{font-size: 16px;color: #000;background-color: #fff;border:1px solid #000;border-radius: 6px;display: block;width: 30%;margin: 2% auto;cursor: pointer;}
+    .window .textBox .close{font-size: 16px;color: #000;background-color: #fff;border:1px solid #000;border-radius: 6px;}
     
 
 
@@ -133,8 +136,8 @@ a:hover { text-decoration: none; }
     div.imgBox{width:100%;height:13.2rem;overflow:hidden;margin:0 auto;}
     div.imgBox ul{clear:both;width:75rem;display: inline-block;}
     div.imgBox ul li{float:left;width:33rem;height:13.2rem;overflow:hidden;text-align:center;}
-    div.imgBox ul li img{width:33rem;height:13.2rem;}
-    #change{height: 13.2rem}
+    
+    
 
     .xwindow{height: 100%;width: 100%;position: absolute;top:0;left: 0;z-index: 10}
     .xwindow .black{width: 100%;height: 100%;background-color: #000;opacity: 0.85}

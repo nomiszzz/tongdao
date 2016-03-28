@@ -132,7 +132,28 @@
     });
 
     /*轮播*/
+//    var scrollImg = $.mggScrollImg('.imgBox ul', {
+//      loop: true,
+//      auto: true,
+//      auto_wait_time: 3000,
+//      scroll_time: 300,
+//      callback: function (ind) {
+//        $('#page').text(ind + 1);
+//      }
+//    });
+    /*轮播修改*/
+    var width = window.screen.width;
+    var height = width * 0.4;
+    $("#change ul").height(height);
+    $("#change ul li").width(width);
+    $("#change ul li").height(height);
+    $("#change").height(height);
+    $("#change").width(width);
+    $(".imgBox").width(width * 3);
+    $(".imgBox").height(height);
+    $(".imgBox img").width(width);
     var scrollImg = $.mggScrollImg('.imgBox ul', {
+      width: width,
       loop: true,
       auto: true,
       auto_wait_time: 3000,
@@ -141,6 +162,7 @@
         $('#page').text(ind + 1);
       }
     });
+
   });
 </script>
 {% end %}

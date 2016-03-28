@@ -133,7 +133,7 @@ class AwardsCodeHandler(BaseApiRequestHandler):
             rdb.lpush(key, award_code)
             logger.warning('insert wining failed')
             self.set_status(500)
-            result = dict(code=40012, msg=u'更新服务器错误, 请稍后重试!')
+            result = dict(code=40012, msg=u'网络错误，请重试')
 
         # TODO test code
         # result = dict(code=40027, msg=u'兑换成功!', award_code='11111', provide='provide')
@@ -176,7 +176,7 @@ class KeepHandler(BaseApiRequestHandler):
         except Exception, e:
             self.set_status(500)
             logger.error('keep pet error {}'.format(e))
-            result = dict(code=40012, msg=u'更新服务器错误, 请稍后重试!')
+            result = dict(code=40012, msg=u'网络错误，请重试')
             return self.jsonify(result)
 
         self.set_status(201)
