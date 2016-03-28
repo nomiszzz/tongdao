@@ -36,7 +36,7 @@ a:hover { text-decoration: none; }
 .eventGround nav .li2{display: block;width: 26%;float: left;}
 .eventGround nav .li3{display: block;width: 28.8%;float: left;}
 .eventGround nav .li4{display: block;width: 27.2%;float: left;}
-#choose{display: none;}
+/*#choose{display: none;}*/
 .eventGround .contain .userPic{display: block;width: 18%;padding: 4px;background: #fff;border: 2px solid #000;border-radius: 50%;position: absolute;bottom: 0;left: 6%;z-index: 9}
     .eventGround .contain .userPic img{width: 100%;border-radius: 50%;}
     .eventGround .contain p.userName{position: absolute;bottom:22%;left:24%;font-size: 14px;line-height: 20px;background: #fff;color: #000;padding:0 4%;border: 2px solid #000;border-top-right-radius: 12px;border-bottom-right-radius: 12px;}
