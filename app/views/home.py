@@ -40,7 +40,7 @@ class PetsHandler(BaseRequestHandler):
     领养列表
     """
 
-    @tornado.web.authenticated
+    # @tornado.web.authenticated
     def get(self):
         # 渲染列表页面
         self.render("pets.html")
