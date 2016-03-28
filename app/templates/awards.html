@@ -35,8 +35,11 @@
   </div>
 
   <img src="/static/images/pic34.jpg">
-  <div class="contain">
-    <img src="/static/images/pic35.jpg">
+  <div class="contain" id="pro">
+    <div class="contain">
+      <img src="/static/images/pic35.jpg">
+    </div>
+    
     <ul class="prolist">
       {% for ad in awards %}
       <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}" data-name="{{ ad['name'] }}">
