@@ -263,19 +263,21 @@ class AwardHandler(AdminBaseHandler):
 
             # 处理兑换码更新操作
             key = 'aid:{}'.format(aid)
-            rdb.delete(key)
 
             code_count = self.get_argument('code', None)
             if code_count:
                 # 随机生成
+                rdb.delete(key)
                 codes = gen_code(int(code_count))
                 for c in codes:
                     row = rdb.lpush(key, c)
                     logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
             else:
+
                 # 处理兑换码导入或自动生成
                 files_body = self.request.files.get('code_file', None)
                 if files_body:
+                    rdb.delete(key)
                     file_ = files_body[0]
                     # 文件扩展名处理
                     file_extension = parse_file_extension(file_)
