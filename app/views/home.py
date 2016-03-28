@@ -18,14 +18,14 @@ class HomeHandler(BaseRequestHandler):
     def get(self, *args, **kwargs):
         uid = self.current_user
         # 如果尚未领取,重定向领取列表
-        # if not has_pet_cache(uid) and not Pet.findone(uid=uid):
-        #     return self.redirect('/pets')
-
-        if not Pet.findone(uid=uid):
+        if not has_pet_cache(uid) and not Pet.findone(uid=uid):
             return self.redirect('/pets')
 
+        # if not Pet.findone(uid=uid):
+        #     return self.redirect('/pets')
+
         # 设置领养的缓存
-        # set_pet_cache(uid)
+        set_pet_cache(uid)
         # 获取领取用户信息
         user_join_pet_info = Pet.get_info(uid)
         if not user_join_pet_info:
