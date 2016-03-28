@@ -203,9 +203,13 @@ class AwardHandler(AdminBaseHandler):
     def post(self, aid):
         award = Award.findone(id=aid)
         name = self.get_argument('name')
+        aname = self.get_argument('aname')
         provide = self.get_argument('provide')
         score = self.get_argument('score')
         status = self.get_argument('status')
+
+        if aname:
+            award.aname = aname
 
         if name:
             award.name = name
@@ -221,32 +225,33 @@ class AwardHandler(AdminBaseHandler):
 
         # 图片上传
         if self.request.files:
-            files_body = self.request.files['file']
-            file_ = files_body[0]
-            # 文件扩展名处理
-            file_extension = parse_file_extension(file_)
+            files_body = self.request.files.get('file')
+            if files_body:
+                file_ = files_body[0]
+                # 文件扩展名处理
+                file_extension = parse_file_extension(file_)
 
-            # 新建上传目录
-            base_dir = config.UPLOADS_DIR['award_dir']
-            if not os.path.exists(base_dir):
-                os.makedirs(base_dir)
-            logger.info('new dir ---------- {}'.format(base_dir))
+                # 新建上传目录
+                base_dir = config.UPLOADS_DIR['award_dir']
+                if not os.path.exists(base_dir):
+                    os.makedirs(base_dir)
+                logger.info('new dir ---------- {}'.format(base_dir))
 
-            new_file_name = '{}{}'.format(time.time(), file_extension)
-            new_file = os.path.join(base_dir, new_file_name)
+                new_file_name = '{}{}'.format(time.time(), file_extension)
+                new_file = os.path.join(base_dir, new_file_name)
 
-            # 备份以前上传的文件
-            if os.path.isfile(new_file):
-                bak_file_name = '{}bak{}'.format(time.time(), file_extension)
-                bak_file = os.path.join(base_dir, bak_file_name)
-                os.rename(new_file, bak_file)
+                # 备份以前上传的文件
+                if os.path.isfile(new_file):
+                    bak_file_name = '{}bak{}'.format(time.time(), file_extension)
+                    bak_file = os.path.join(base_dir, bak_file_name)
+                    os.rename(new_file, bak_file)
 
-            # 写入文件
-            with open(new_file, 'w') as w:
-                w.write(file_['body'])
-            new_file_url = '{}{}'.format('/static/uploads/award/', new_file_name)
-            logger.info('new file url {}'.format(new_file_url))
-            award.image = new_file_url
+                # 写入文件
+                with open(new_file, 'w') as w:
+                    w.write(file_['body'])
+                new_file_url = '{}{}'.format('/static/uploads/award/', new_file_name)
+                logger.info('new file url {}'.format(new_file_url))
+                award.image = new_file_url
         try:
             row = award.update()
             logger.info('update award row {}'.format(row))
@@ -255,6 +260,53 @@ class AwardHandler(AdminBaseHandler):
             error, message = True, u'修改失败'
             self.render('admin-award-update.html', award=award, error=error, message=message)
         else:
+
+            # 处理兑换码更新操作
+            addway = self.get_argument('addway', 1)
+            key = 'aid:{}'.format(aid)
+
+            if int(addway) == 0:
+                # 覆盖模式
+                rdb.delete(key)
+
+            code_count = self.get_argument('code', None)
+            if code_count:
+                # 随机生成
+                codes = gen_code(int(code_count))
+                for c in codes:
+                    row = rdb.lpush(key, c)
+                    logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
+            else:
+                # 处理兑换码导入或自动生成
+                files_body = self.request.files.get('code_file', None)
+                if files_body:
+                    file_ = files_body[0]
+                    # 文件扩展名处理
+                    file_extension = parse_file_extension(file_)
+
+                    # 新建上传目录
+                    base_dir = config.UPLOADS_DIR['csv_dir']
+                    if not os.path.exists(base_dir):
+                        os.makedirs(base_dir)
+                    logger.info('new dir ---------- {}'.format(base_dir))
+
+                    new_file_name = '{}{}'.format(time.time(), file_extension)
+                    new_file = os.path.join(base_dir, new_file_name)
+
+                    # 备份以前上传的文件
+                    if os.path.isfile(new_file):
+                        bak_file_name = '{}bak{}'.format(time.time(), file_extension)
+                        bak_file = os.path.join(base_dir, bak_file_name)
+                        os.rename(new_file, bak_file)
+
+                    # 写入文件
+                    with open(new_file, 'w') as w:
+                        w.write(file_['body'])
+
+                    with open(new_file, 'r') as f:
+                        for line in csv.reader(f):
+                            row = rdb.lpush(key, line[0])
+                            logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
             self.redirect('/admin/awards')
 
 
@@ -269,6 +321,11 @@ class AdminAwardHandler(AdminBaseHandler):
 
         status = self.get_argument('status')
         name = self.get_argument('name', '')
+        aname = self.get_argument('aname', '')
+
+        if not aname:
+            error, message = True, u'请填写奖品名'
+            return self.render('admin-award-add.html', error=error, message=message)
 
         if not name:
             error, message = True, u'请填写奖品说明'
@@ -286,41 +343,43 @@ class AdminAwardHandler(AdminBaseHandler):
                 score = int(score)
             except Exception, e:
                 error, message = True, u'兑换点数仅为数字'
-            # else:
-            #     error, message = True, u'请填兑换点数,仅为数字'
                 return self.render('admin-award-add.html', error=error, message=message)
 
         # 图片上传
         if self.request.files:
-            files_body = self.request.files['file']
-            file_ = files_body[0]
-            # 文件扩展名处理
-            file_extension = parse_file_extension(file_)
+            files_body = self.request.files.get('file')
+            if files_body:
+                file_ = files_body[0]
+                # 文件扩展名处理
+                file_extension = parse_file_extension(file_)
 
-            # 新建上传目录
-            base_dir = config.UPLOADS_DIR['banner_dir']
-            if not os.path.exists(base_dir):
-                os.makedirs(base_dir)
-            logger.info('new dir ---------- {}'.format(base_dir))
+                # 新建上传目录
+                base_dir = config.UPLOADS_DIR['banner_dir']
+                if not os.path.exists(base_dir):
+                    os.makedirs(base_dir)
+                logger.info('new dir ---------- {}'.format(base_dir))
 
-            new_file_name = '{}{}'.format(time.time(), file_extension)
-            new_file = os.path.join(base_dir, new_file_name)
+                new_file_name = '{}{}'.format(time.time(), file_extension)
+                new_file = os.path.join(base_dir, new_file_name)
 
-            # 备份以前上传的文件
-            if os.path.isfile(new_file):
-                bak_file_name = '{}bak{}'.format(time.time(), file_extension)
-                bak_file = os.path.join(base_dir, bak_file_name)
-                os.rename(new_file, bak_file)
+                # 备份以前上传的文件
+                if os.path.isfile(new_file):
+                    bak_file_name = '{}bak{}'.format(time.time(), file_extension)
+                    bak_file = os.path.join(base_dir, bak_file_name)
+                    os.rename(new_file, bak_file)
 
-            # 写入文件
-            with open(new_file, 'w') as w:
-                w.write(file_['body'])
-            new_file_url = '{}{}'.format('/static/uploads/banner/', new_file_name)
-            logger.info('new file url {}'.format(new_file_url))
+                # 写入文件
+                with open(new_file, 'w') as w:
+                    w.write(file_['body'])
+                new_file_url = '{}{}'.format('/static/uploads/banner/', new_file_name)
+                logger.info('new file url {}'.format(new_file_url))
+            else:
+                error, message = True, u'请选择奖品照片'
+                return self.render('admin-award-add.html', error=error, message=message)
         else:
             error, message = True, u'请选择照片'
             return self.render('admin-award-add.html', error=error, message=message)
-        award = Award(name=name, provide=provide, score=score, image=new_file_url, status=int(status))
+        award = Award(name=name, aname=aname, provide=provide, score=score, image=new_file_url, status=int(status))
 
         try:
             row = award.insert()

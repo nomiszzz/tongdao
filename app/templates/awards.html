@@ -39,19 +39,14 @@
     <img src="/static/images/pic35.jpg">
     <ul class="prolist">
       {% for ad in awards %}
-      <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}">
+      <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}" data-name="{{ ad['name'] }}">
         {% if ad['count'] == 0 or ad['status'] == 0 %}
         <div class="proWin"></div>
         {% end %}
         <div class="proDetial">
           <p style="height: 36px;overflow: hidden;">
             <strong>{{ ad['provide'] }}</strong>
-            <strong class="award-name">{{ ad['name'] }}</strong>
-            <!--<strong class="award-name">-->
-              <!--{% for n in ad['name'].split("\n") %}-->
-              <!--{{ n }}<br />-->
-              <!--{% end %}-->
-            <!--</strong>-->
+            <strong>{{ ad['aname'] }}</strong>
           </p>
           <span class="cost"><em>{{ ad['score'] }}</em>点</span>
         </div>
@@ -89,16 +84,15 @@
       score = parseInt($(this).find('em').text());
       aid = $(this).attr('data-aid');
       var provide = $(this).attr('data-provide');
-      var awardName = $(this).find('.award-name').text();
-      var awardNameArr = awardName.split("\n");
-      console.log(awardNameArr);
-      var awardName_html = '';
-      for (var i=0; i<awardNameArr.length; i++){
-        awardName_html += awardNameArr[i] + '<br />';
+      var wardName = $(this).attr('data-name');
+      var wardNameArr = wardName.split("\n");
+      var wardNameHtml = '';
+      for (var i = 0; i < wardNameArr.length; i++) {
+        wardNameHtml += wardNameArr[i] + '<br />';
       }
 
       $(".textBox .name").text('活动奖品有' + provide + '商家提供');
-      $(".textBox .description").html(awardName_html);
+      $(".textBox .description").html(wardNameHtml);
       $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
       $(".window").show();
     });

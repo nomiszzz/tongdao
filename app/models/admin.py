@@ -19,6 +19,7 @@ class Award(Model):
     __table__ = 'award'
 
     id = Integer(length=8, primary_key=True, nullable=False, auto_increment=True, updateable=False)
+    aname = String(length=150, nullable=True)
     name = String(length=150, nullable=True)
     provide = String(length=150, nullable=True)
     image = String(length=20, nullable=True)

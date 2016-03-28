@@ -12,6 +12,7 @@
       <thead>
       <tr>
         <th class="text-center">序号</th>
+        <th class="text-center">奖品名</th>
         <th class="text-center">说明</th>
         <th class="text-center">提供商</th>
         <th class="text-center">兑换点数</th>
@@ -26,6 +27,7 @@
       {% for award in awards %}
       <tr>
         <td class="text-center">{{ award['id'] }}</td>
+        <td class="text-center">{{ award['aname'] }}</td>
         <td class="text-center">
           {% for n in award['name'].split("\n") %}
           {{ n }}<br/>
