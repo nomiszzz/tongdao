@@ -2,17 +2,31 @@
 {% block title %}奖品修改{% end %}
 {% block script %}
 <script type="text/javascript" src="/static/scripts/hotkeys.js"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    $('#way').change(function () {
+      var value = $(this).val();
+      if (value == '1') {
+        $('#code_file_form').show();
+        $('#code_form').hide();
+      } else {
+        $('#code_file_form').hide();
+        $('#code_form').show();
+      }
+    });
+  });
+</script>
 {% end %}
 {% block main %}
 <div class="row">
   <br/>
   <br/>
   <br/>
-  <div class="col-md-4 col-md-push-4">
+  <div class="col-md-10 col-md-push-1">
     <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
       {% module xsrf_form_html() %}
       <div class="form-group {% if error %} has-error {% end %}">
-        <label for="name" class="col-sm-2 control-label"></label>
+        <label for="name" class="col-sm-2 control-label">奖品说明</label>
         <div class="col-sm-10">
 
           <textarea id="name" class="form-control" name="name" rows="5"
@@ -21,32 +35,72 @@
         </div>
       </div>
       <div class="form-group {% if error %} has-error {% end %}">
-        <label for="name" class="col-sm-2 control-label"></label>
+        <label for="name" class="col-sm-2 control-label">奖品提供方</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="provide" name="provide" value="{{ award['provide'] }}">
           <p class="help-block">请输入奖品提供方</p>
         </div>
       </div>
       <div class="form-group {% if error %} has-error {% end %}">
-        <label for="name" class="col-sm-2 control-label"></label>
+        <label for="name" class="col-sm-2 control-label">兑换点数</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="score" name="score" value="{{ award['score'] }}">
           <p class="help-block">请输入兑换所需的点数</p>
         </div>
       </div>
       <div class="form-group">
-        <label for="file" class="col-sm-2 control-label"></label>
+        <label for="file" class="col-sm-2 control-label">奖品图片</label>
         <div class="col-sm-10">
           <input type="file" class="form-control" id="file" name="file">
           <p class="help-block">请选择奖品图片,不选则不会修改原图</p>
         </div>
       </div>
+
+      <div class="form-group {% if error %} has-error {% end %}">
+        <label for="addway" class="col-sm-2 control-label">兑换码更新方式</label>
+        <div class="col-sm-10">
+          <select class="form-control" id="addway" name="addway">
+            <option value="0">覆盖</option>
+            <option value="1" selected="selected">追加</option>
+          </select>
+          <p class="help-block">覆盖模式将会先清除现有的兑换码,追加方式将添加新的兑换码</p>
+        </div>
+      </div>
+
+      <div class="form-group {% if error %} has-error {% end %}">
+        <label for="way" class="col-sm-2 control-label">兑换码生成方式</label>
+        <div class="col-sm-10">
+          <select class="form-control" id="way" name="status">
+            <option value="0">自动生成</option>
+            <option value="1" selected="selected">导入</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group {% if error %} has-error {% end %}" id="code_file_form">
+        <label for="code_file" class="col-sm-2 control-label">兑换码导入</label>
+        <div class="col-sm-10">
+          <input type="file" class="form-control" id="code_file" name="code_file">
+          <p class="help-block">请选择导入的兑换码csv文件</p>
+        </div>
+      </div>
+
+      <div class="form-group {% if error %} has-error {% end %}" style="display: none;" id="code_form">
+        <label for="code" class="col-sm-2 control-label">兑换码个数</label>
+        <div class="col-sm-10">
+          <input type="text" class="form-control" id="code" name="code" placeholder="请输入自动生成兑换码的个数">
+        </div>
+      </div>
+
+
       <div class="form-group {% if error %} has-error {% end %}">
         <label for="file" class="col-sm-2 control-label"></label>
         <div class="col-sm-10">
           <select class="form-control" id="status" name="status">
-            <option value="0" {% if award['status'] == 0 %}selected="selected"{% end %}>无效</option>
-            <option value="1" {% if award['status'] == 1 %}selected="selected"{% end %}>有效</option>
+            <option value="0" {% if award[
+            'status'] == 0 %}selected="selected"{% end %}>无效</option>
+            <option value="1" {% if award[
+            'status'] == 1 %}selected="selected"{% end %}>有效</option>
           </select>
         </div>
       </div>

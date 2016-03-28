@@ -26,31 +26,31 @@
   <br/>
   <br/>
   <br/>
-  <div class="col-md-4 col-md-push-4">
+  <div class="col-md-10 col-md-push-1">
     <form class="form-horizontal" role="form" method="post" enctype="multipart/form-data">
       {% module xsrf_form_html() %}
       <div class="form-group {% if error %} has-error {% end %}">
-        <label for="name" class="col-sm-2 control-label"></label>
+        <label for="name" class="col-sm-2 control-label">奖品说明</label>
         <div class="col-sm-10">
           <textarea id="name" name="name" rows="5" placeholder="请输入奖品说明" autofocus style="width: 100%"></textarea>
           <!--<input type="text" class="form-control" id="name" name="name" placeholder="请输入奖品说明">-->
         </div>
       </div>
       <div class="form-group {% if error %} has-error {% end %}">
-        <label for="name" class="col-sm-2 control-label"></label>
+        <label for="name" class="col-sm-2 control-label">奖品提供方</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="provide" name="provide" placeholder="请输入奖品提供方">
 
         </div>
       </div>
       <div class="form-group {% if error %} has-error {% end %}">
-        <label for="name" class="col-sm-2 control-label"></label>
+        <label for="name" class="col-sm-2 control-label">兑换点数</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="score" name="score" placeholder="请输入兑换所需的点数">
         </div>
       </div>
       <div class="form-group">
-        <label for="file" class="col-sm-2 control-label"></label>
+        <label for="file" class="col-sm-2 control-label">奖品图片</label>
         <div class="col-sm-10">
           <input type="file" class="form-control" id="file" name="file">
           <p class="help-block">请选择奖品图片,不选则不会修改原图</p>
@@ -58,7 +58,7 @@
       </div>
 
       <div class="form-group {% if error %} has-error {% end %}">
-        <label for="way" class="col-sm-2 control-label"></label>
+        <label for="way" class="col-sm-2 control-label">兑换码生成方式</label>
         <div class="col-sm-10">
           <select class="form-control" id="way" name="status">
             <option value="0">自动生成</option>
@@ -68,22 +68,21 @@
       </div>
 
       <div class="form-group {% if error %} has-error {% end %}" id="code_file_form">
-        <label for="code_file" class="col-sm-2 control-label"></label>
+        <label for="code_file" class="col-sm-2 control-label">兑换码导入</label>
         <div class="col-sm-10">
           <input type="file" class="form-control" id="code_file" name="code_file">
           <p class="help-block">请选择导入的兑换码csv文件</p>
         </div>
       </div>
-
       <div class="form-group {% if error %} has-error {% end %}" style="display: none;" id="code_form">
-        <label for="code" class="col-sm-2 control-label"></label>
+        <label for="code" class="col-sm-2 control-label">自动生成兑换码个数</label>
         <div class="col-sm-10">
           <input type="text" class="form-control" id="code" name="code" placeholder="请输入自动生成兑换码的个数">
         </div>
       </div>
 
       <div class="form-group {% if error %} has-error {% end %}">
-        <label for="file" class="col-sm-2 control-label"></label>
+        <label for="file" class="col-sm-2 control-label">奖品状态</label>
         <div class="col-sm-10">
           <select class="form-control" id="status" name="status">
             <option value="0">无效</option>
