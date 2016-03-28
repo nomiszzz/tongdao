@@ -98,6 +98,10 @@ def gen_random_code(length=6):
     chars = '0123456789'
     return ''.join([random.choice(chars) for i in range(length)])
 
+def gen_code(count):
+    codes = set([gen_random_code() for i in range(count)])
+    return codes
+
 
 def get_to_tomorrow():
     now = datetime.datetime.now()

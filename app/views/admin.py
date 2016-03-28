@@ -8,7 +8,7 @@ import csv
 import time
 from app.models.auth import Admin, User
 from app.models.admin import Banner, Award, Winning
-from app.helper import AdminBaseHandler, admin_require, encrypt_password, parse_file_extension
+from app.helper import AdminBaseHandler, admin_require, encrypt_password, parse_file_extension, gen_code
 from app.libs import router
 from settings import logger, config, rdb
 
@@ -328,6 +328,45 @@ class AdminAwardHandler(AdminBaseHandler):
             error, message = True, u'添加失败'
             self.render('admin-award-add.html', error=error, message=message)
         else:
+            key = 'aid:{}'.format(row)
+
+            code_count = self.get_argument('code', None)
+            if code_count:
+                # 随机生成
+                codes = gen_code(int(code_count))
+                for c in codes:
+                    row =  rdb.lpush(key, c)
+                    logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
+            else:
+                # 处理兑换码导入或自动生成
+                files_body = self.request.files['code_file']
+                file_ = files_body[0]
+                # 文件扩展名处理
+                file_extension = parse_file_extension(file_)
+
+                # 新建上传目录
+                base_dir = config.UPLOADS_DIR['csv_dir']
+                if not os.path.exists(base_dir):
+                    os.makedirs(base_dir)
+                logger.info('new dir ---------- {}'.format(base_dir))
+
+                new_file_name = '{}{}'.format(time.time(), file_extension)
+                new_file = os.path.join(base_dir, new_file_name)
+
+                # 备份以前上传的文件
+                if os.path.isfile(new_file):
+                    bak_file_name = '{}bak{}'.format(time.time(), file_extension)
+                    bak_file = os.path.join(base_dir, bak_file_name)
+                    os.rename(new_file, bak_file)
+
+                # 写入文件
+                with open(new_file, 'w') as w:
+                    w.write(file_['body'])
+
+                with open(new_file, 'r') as f:
+                    for line in csv.reader(f):
+                        row =  rdb.lpush(key, line[0])
+                        logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
             self.redirect('/admin/awards')
 
 
@@ -350,7 +389,7 @@ class AdminUploadHandler(AdminBaseHandler):
     @admin_require
     def post(self, aid):
 
-        # 图片上传
+
         if self.request.files:
             files_body = self.request.files['file']
             file_ = files_body[0]
