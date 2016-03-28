@@ -3,13 +3,14 @@
 
 __author__ = 'ghost'
 
-import os
 import csv
 import time
-from app.models.auth import Admin, User
-from app.models.admin import Banner, Award, Winning
+
+import os
 from app.helper import AdminBaseHandler, admin_require, encrypt_password, parse_file_extension, gen_code
 from app.libs import router
+from app.models.admin import Banner, Award, Winning
+from app.models.auth import Admin, User
 from settings import logger, config, rdb
 
 
@@ -188,7 +189,6 @@ class AdminAwardsHandler(AdminBaseHandler):
             key = 'aid:{}'.format(ad['id'])
             counts = rdb.llen(key)
             setattr(ad, 'counts', counts)
-
         self.render('admin-awards.html', awards=awards)
 
 
@@ -286,9 +286,9 @@ class AdminAwardHandler(AdminBaseHandler):
                 score = int(score)
             except Exception, e:
                 error, message = True, u'兑换点数仅为数字'
-            else:
-                error, message = True, u'请填兑换点数,仅为数字'
-            return self.render('admin-award-add.html', error=error, message=message)
+            # else:
+            #     error, message = True, u'请填兑换点数,仅为数字'
+                return self.render('admin-award-add.html', error=error, message=message)
 
         # 图片上传
         if self.request.files:
@@ -335,9 +335,10 @@ class AdminAwardHandler(AdminBaseHandler):
             code_count = self.get_argument('code', None)
             if code_count:
                 # 随机生成
+                print code_count
                 codes = gen_code(int(code_count))
                 for c in codes:
-                    row =  rdb.lpush(key, c)
+                    row = rdb.lpush(key, c)
                     logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
             else:
                 # 处理兑换码导入或自动生成
@@ -367,7 +368,7 @@ class AdminAwardHandler(AdminBaseHandler):
 
                 with open(new_file, 'r') as f:
                     for line in csv.reader(f):
-                        row =  rdb.lpush(key, line[0])
+                        row = rdb.lpush(key, line[0])
                         logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
             self.redirect('/admin/awards')
 
@@ -390,7 +391,6 @@ class AdminUploadHandler(AdminBaseHandler):
 
     @admin_require
     def post(self, aid):
-
 
         if self.request.files:
             files_body = self.request.files['file']
@@ -420,13 +420,13 @@ class AdminUploadHandler(AdminBaseHandler):
             key = 'aid:{}'.format(aid)
             with open(new_file, 'r') as f:
                 for line in csv.reader(f):
-                    row =  rdb.lpush(key, line[0])
+                    row = rdb.lpush(key, line[0])
                     logger.info('redis lpush key-- {} resp-- {}'.format(key, row))
         self.redirect('/admin/awards')
 
+
 @router.Route('/admin/award/(?P<aid>\d+)/codes')
 class AdminCodesHandler(AdminBaseHandler):
-
     @admin_require
     def get(self, aid):
         key = 'aid:{}'.format(aid)
@@ -434,9 +434,9 @@ class AdminCodesHandler(AdminBaseHandler):
         codes = rdb.lrange(key, 0, end)
         self.render('admin-award-codes.html', codes=codes)
 
+
 @router.Route('/admin/users')
 class AdminUsersHandler(AdminBaseHandler):
-
     @admin_require
     def get(self, *args, **kwargs):
         users = User.get_info()

@@ -27,9 +27,9 @@
       <tr>
         <td class="text-center">{{ award['id'] }}</td>
         <td class="text-center">
-          {% for n in award['name'].split() %}
-            {{n}}</br>
-          {%end%}
+          {% for n in award['name'].split("\n") %}
+          {{ n }}<br/>
+          {% end %}
         </td>
         <!--<td class="text-center">{{ award['name'] }}</td>-->
         <td class="text-center">{{ award['provide'] }}</td>

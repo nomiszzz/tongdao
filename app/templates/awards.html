@@ -47,6 +47,11 @@
           <p style="height: 36px;overflow: hidden;">
             <strong>{{ ad['provide'] }}</strong>
             <strong class="award-name">{{ ad['name'] }}</strong>
+            <!--<strong class="award-name">-->
+              <!--{% for n in ad['name'].split("\n") %}-->
+              <!--{{ n }}<br />-->
+              <!--{% end %}-->
+            <!--</strong>-->
           </p>
           <span class="cost"><em>{{ ad['score'] }}</em>点</span>
         </div>
@@ -85,9 +90,15 @@
       aid = $(this).attr('data-aid');
       var provide = $(this).attr('data-provide');
       var awardName = $(this).find('.award-name').text();
+      var awardNameArr = awardName.split("\n");
+      console.log(awardNameArr);
+      var awardName_html = '';
+      for (var i=0; i<awardNameArr.length; i++){
+        awardName_html += awardNameArr[i] + '<br />';
+      }
 
       $(".textBox .name").text('活动奖品有' + provide + '商家提供');
-      $(".textBox .description").text(awardName);
+      $(".textBox .description").html(awardName_html);
       $(".textBox .score").text('点击兑换后会扣除' + score + '点数哦！');
       $(".window").show();
     });
@@ -122,7 +133,6 @@
     $(".close").bind("click", function () {
       $(".window").hide();
       $(".textBox").find("div").eq(0).show();
-//      $(".textBox").find("div").eq(1).hide();
       $('#response').hide();
 
     });
