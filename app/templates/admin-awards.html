@@ -23,24 +23,29 @@
       </thead>
       <tbody>
       {% if awards %}
-        {% for award in awards %}
-        <tr>
-          <td class="text-center">{{ award['id'] }}</td>
-          <td class="text-center">{{ award['name'] }}</td>
-          <td class="text-center">{{ award['provide'] }}</td>
-          <th class="text-center">{{ award['score'] }}</th>
-          <th class="text-center"><a href="/admin/award/{{ award['id'] }}/codes">{{ award['counts'] }}</a></th>
-          <td class="text-center"><a href="{{ award['image'] }}">查看图片</a></td>
-          <td class="text-center">
-            {% if award['status'] == 1 %}
-              有效
-            {% else %}
-              无效
-            {% end %}
-          </td>
-          <td class="text-center"><a href="/admin/award/{{ award['id'] }}/update">修改</a></td>
-        </tr>
-        {% end %}
+      {% for award in awards %}
+      <tr>
+        <td class="text-center">{{ award['id'] }}</td>
+        <td class="text-center">
+          {% for n in award['name'].split() %}
+            {{n}}</br>
+          {%end%}
+        </td>
+        <!--<td class="text-center">{{ award['name'] }}</td>-->
+        <td class="text-center">{{ award['provide'] }}</td>
+        <th class="text-center">{{ award['score'] }}</th>
+        <th class="text-center"><a href="/admin/award/{{ award['id'] }}/codes">{{ award['counts'] }}</a></th>
+        <td class="text-center"><a href="{{ award['image'] }}">查看图片</a></td>
+        <td class="text-center">
+          {% if award['status'] == 1 %}
+          有效
+          {% else %}
+          无效
+          {% end %}
+        </td>
+        <td class="text-center"><a href="/admin/award/{{ award['id'] }}/update">修改</a></td>
+      </tr>
+      {% end %}
       {% end %}
       </tbody>
     </table>

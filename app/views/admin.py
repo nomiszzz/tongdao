@@ -188,6 +188,7 @@ class AdminAwardsHandler(AdminBaseHandler):
             key = 'aid:{}'.format(ad['id'])
             counts = rdb.llen(key)
             setattr(ad, 'counts', counts)
+
         self.render('admin-awards.html', awards=awards)
 
 
@@ -267,7 +268,8 @@ class AdminAwardHandler(AdminBaseHandler):
     def post(self):
 
         status = self.get_argument('status')
-        name = self.get_argument('name')
+        name = self.get_argument('name', '')
+
         if not name:
             error, message = True, u'请填写奖品说明'
             return self.render('admin-award-add.html', error=error, message=message)
@@ -277,9 +279,9 @@ class AdminAwardHandler(AdminBaseHandler):
             error, message = True, u'请填提供商'
             return self.render('admin-award-add.html', error=error, message=message)
 
-        score = self.get_argument('score')
+        score = self.get_argument('score', 0)
 
-        if not score:
+        if score:
             try:
                 score = int(score)
             except Exception, e:
