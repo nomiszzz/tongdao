@@ -110,7 +110,7 @@ class AwardsCodeHandler(BaseApiRequestHandler):
         # 奖品下线
         if not award:
             self.set_status(400)
-            result = dict(code=40022, msg=u'奖品已经下线,请联系客服哦')
+            result = dict(code=40022, msg=u'奖品已经下线')
             return self.jsonify(result)
 
         key = 'aid:{}'.format(award['id'])

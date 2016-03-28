@@ -64,6 +64,9 @@ class CallbackHandler(BaseRequestHandler):
             self.redirect('/error')
             return
 
+        # if data.get('errcode') == 45009:
+        #     self.redirect('error')
+
         openid = data['openid']
         sex = data['sex']
         nickname = data['nickname'].encode('unicode-escape')
