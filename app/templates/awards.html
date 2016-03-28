@@ -41,7 +41,11 @@
       {% for ad in awards %}
       <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}" data-name="{{ ad['name'] }}">
         {% if ad['count'] == 0 or ad['status'] == 0 %}
-        <div class="proWin"></div>
+
+        <div class="proWin">
+          <div></div>
+          <p>已抢光</p>
+        </div>
         {% end %}
         <div class="proDetial">
           <p style="height: 36px;overflow: hidden;">
