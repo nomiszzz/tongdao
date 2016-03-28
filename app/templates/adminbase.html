@@ -9,6 +9,7 @@
   <script src="/static/js/jquery.js" type="text/javascript"></script>
   <!-- Include all compiled plugins (below), or include individual files as needed -->
   <script src="/static/js/bootstrap.min.js" type="text/javascript"></script>
+  {% block script %}{% end %}
 </head>
 <body>
 <header class="nav navbar-static-top  navbar-inverse" id="top" role="banner">
@@ -59,7 +60,7 @@
   </div>
 </header>
 <div class="container">
-  <br />
+  <br/>
   {% if message %}
   <div class="alert alert-{% if error %}danger{% else %}success{% end %} alert-dismissible text-center" role="alert">
     <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span
