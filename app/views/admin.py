@@ -262,12 +262,8 @@ class AwardHandler(AdminBaseHandler):
         else:
 
             # 处理兑换码更新操作
-            addway = self.get_argument('addway', 1)
             key = 'aid:{}'.format(aid)
-
-            if int(addway) == 0:
-                # 覆盖模式
-                rdb.delete(key)
+            rdb.delete(key)
 
             code_count = self.get_argument('code', None)
             if code_count:
