@@ -124,8 +124,9 @@ class CallbackHandler(BaseRequestHandler):
 
 @router.Route('/api/v1/weixin/share')
 class ActivityTransformHandler(BaseApiRequestHandler):
-    @tornado.gen.coroutine
+
     @tornado.web.asynchronous
+    @tornado.gen.coroutine
     def get(self):
         remote_url = self.get_argument("url")
         appid = config.WEIXIN['appid']
@@ -155,15 +156,15 @@ class ActivityTransformHandler(BaseApiRequestHandler):
             rdb.expire(token_key, data['expires_in'])
 
         if rdb.exists("%s" % ticket_key):
-            js_ticket = self.s_connect.get(ticket_key)
+            js_ticket = rdb.get(ticket_key)
         else:
             http_client = tornado.httpclient.AsyncHTTPClient()
             url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={}&type=jsapi".format(access_token)
             resp = yield tornado.gen.Task(http_client.fetch, url, method="GET")
             data = json.loads(resp.body)
             js_ticket = data['ticket']
-            self.s_connect.set(ticket_key, js_ticket)
-            self.s_connect.expire(ticket_key, data['expires_in'])
+            rdb.set(ticket_key, js_ticket)
+            rdb.expire(ticket_key, data['expires_in'])
         noncestr = gen_password()
         timestamp = int(time.time())
         jsapi_ticket = "jsapi_ticket={}&noncestr={}&timestamp={}&url={}".format(
