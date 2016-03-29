@@ -15,7 +15,7 @@
   <div class="black"></div>
   <div class="windowtxt">
     <p>领取的点数不符合哦</p>
-    <span><img src="/static/images/ok.png"></span>
+    <span class="close" style="display: block;width: 30%;margin: 2% auto;cursor: pointer;"></span>
   </div>
 </div>
 
@@ -39,7 +39,7 @@
     <div class="contain">
       <img src="/static/images/pic35.jpg">
     </div>
-    
+
     <ul class="prolist">
       {% for ad in awards %}
       <li data-provide="{{ ad['provide'] }}" data-aid="{{ ad['id'] }}" data-name="{{ ad['name'] }}">
@@ -75,7 +75,10 @@
 
     <div id="response" style="display: none;">
       <p class="code" id="code">兑换码：666666</p>
-      <span class="close">ok</span>
+      <span class="close" style="    display: block;
+    width: 30%;
+    margin: 2% auto;
+    cursor: pointer;">ok</span>
     </div>
   </div>
 </div>
