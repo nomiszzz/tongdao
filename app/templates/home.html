@@ -94,15 +94,23 @@
 
 
 //    $('.windowtxt').bind('click', function () {
-//      $('#xwindow').hide();
+//      $('.xwindow').hide();
 //    });
 
     /*修改*/
+    $("#sure").bind("touchstart", function (e) {
+      event.preventDefault();
+    });
+    $("#sure").bind("touchend", function (e) {
+      $("#xwindow").hide();
+    });
+
+
     $(".windowtxt").bind("touchstart", function (e) {
       event.preventDefault();
     });
     $(".windowtxt").bind("touchend", function (e) {
-      $(".xwindow").hide();
+      $("#xwindow").hide();
     });
     /*结束*/
 
