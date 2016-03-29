@@ -66,6 +66,7 @@
 <div class="window">
   <div class="shadow"></div>
   <div class="textBox">
+    <span id="cancle"><img src="/static/images/cross.png"></span>
     <div>
       <span class="name"></span>
       <p class="description">奖品说明</p>
@@ -141,16 +142,13 @@
 
     });
 
-    /*轮播*/
-//    var scrollImg = $.mggScrollImg('.imgBox ul', {
-//      loop: true,
-//      auto: true,
-//      auto_wait_time: 3000,
-//      scroll_time: 300,
-//      callback: function (ind) {
-//        $('#page').text(ind + 1);
-//      }
-//    });
+    $("#cancle").bind("touchstart", function (e) {
+      event.preventDefault();
+    });
+    $("#cancle").bind("touchend", function (e) {
+      $(".window").hide();
+    });
+
     /*轮播修改*/
     var proH = $(".prolist").height();
     $("#pro").height(proH);

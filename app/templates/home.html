@@ -93,16 +93,18 @@
   $(document).ready(function () {
 
 
-    $('.windowtxt').bind('click', function () {
-      $('#xwindow').hide();
-    });
+//    $('.windowtxt').bind('click', function () {
+//      $('#xwindow').hide();
+//    });
 
-//    $(".windowtxt").bind("touchstart", function (e) {
-//      event.preventDefault();
-//    });
-//    $(".windowtxt").bind("touchend", function (e) {
-//      $(".xwindow").hide();
-//    });
+    /*修改*/
+    $(".windowtxt").bind("touchstart", function (e) {
+      event.preventDefault();
+    });
+    $(".windowtxt").bind("touchend", function (e) {
+      $(".xwindow").hide();
+    });
+    /*结束*/
 
     $("#btn1").on("click", function () {
       $("#choose").show();
