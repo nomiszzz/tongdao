@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 
+import hashlib
 import json
 import time
-import hashlib
+
 import tornado.gen
 import tornado.httpclient
 import tornado.web
@@ -124,7 +125,6 @@ class CallbackHandler(BaseRequestHandler):
 
 @router.Route('/api/v1/weixin/share')
 class ActivityTransformHandler(BaseApiRequestHandler):
-
     @tornado.web.asynchronous
     @tornado.gen.coroutine
     def get(self):
@@ -165,10 +165,17 @@ class ActivityTransformHandler(BaseApiRequestHandler):
             js_ticket = data['ticket']
             rdb.set(ticket_key, js_ticket)
             rdb.expire(ticket_key, data['expires_in'])
+
         noncestr = gen_password()
         timestamp = int(time.time())
         jsapi_ticket = "jsapi_ticket={}&noncestr={}&timestamp={}&url={}".format(
                 js_ticket, noncestr, timestamp, remote_url)
         signature = hashlib.sha1(jsapi_ticket).hexdigest()
+
+        # logger.info("weixin ticket {}".format(js_ticket))
+        # logger.info('{}'.format(noncestr))
+        # logger.info('{}'.format(timestamp))
+        # logger.info('{}'.format(signature))
+
         result = dict(timestamp=timestamp, nonceStr=noncestr, signature=signature, appId=appid, url=remote_url)
         self.finish(json.dumps(result, ensure_ascii=False))
