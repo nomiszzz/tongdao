@@ -104,6 +104,18 @@
 
   $(document).ready(function () {
 
+
+    $('.windowtxt').bind('click', function () {
+      $('#xwindow').hide();
+    });
+
+//    $(".windowtxt").bind("touchstart", function (e) {
+//      event.preventDefault();
+//    });
+//    $(".windowtxt").bind("touchend", function (e) {
+//      $(".xwindow").hide();
+//    });
+
     $("#btn1").on("click", function () {
       $("#choose").show();
     });
@@ -141,9 +153,6 @@
     });
   });
 
-  $('.windowtxt').bind('click', function () {
-    $('#xwindow').hide();
-  });
 
   function request(url, scores, num, selecotr) {
     $.ajax({
