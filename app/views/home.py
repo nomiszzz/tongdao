@@ -5,10 +5,10 @@ __author__ = 'ghost'
 
 import tornado.web
 from app.helper import BaseRequestHandler, has_pet_cache, set_pet_cache, BaseApiRequestHandler
+from app.helper import get_to_tomorrow
 from app.libs import router
-from app.helper import gen_random_code, get_to_tomorrow
-from app.models.home import Pet
 from app.models.admin import Award, Banner
+from app.models.home import Pet
 from settings import logger, rdb
 
 

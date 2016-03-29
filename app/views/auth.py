@@ -2,13 +2,15 @@
 # -*- coding:utf-8 -*-
 
 import json
-import tornado.web
+import time
+import hashlib
 import tornado.gen
 import tornado.httpclient
-from app.helper import BaseRequestHandler
+import tornado.web
+from app.helper import BaseRequestHandler, BaseApiRequestHandler, gen_password
 from app.libs import router
 from app.models.auth import User
-from settings import config, logger
+from settings import config, logger, rdb
 
 
 @router.Route('/auth/signin')
@@ -16,22 +18,21 @@ class SigninHandler(BaseRequestHandler):
     """微信授权"""
 
     def get(self, *args, **kwargs):
-
         appid = config.WEIXIN['appid']
         authorize_api = config.WEIXIN['authorize_api']
         redirect_uri = config.WEIXIN['redirect_uri']
 
         authorize_url = (
             "{authorize_api}?appid={appid}&redirect_uri={redirect_uri}&response_type=code&scope=snsapi_login".format(
-                authorize_api=authorize_api,
-                appid=appid,
-                redirect_uri=redirect_uri))
+                    authorize_api=authorize_api,
+                    appid=appid,
+                    redirect_uri=redirect_uri))
         logger.info(u'weixin authorize url {}'.format(authorize_url))
         return self.redirect(authorize_url)
 
+
 @router.Route('/auth/callback')
 class CallbackHandler(BaseRequestHandler):
-
     @tornado.web.asynchronous
     @tornado.gen.coroutine
     def get(self, *args, **kwargs):
@@ -42,7 +43,7 @@ class CallbackHandler(BaseRequestHandler):
         secret = config.WEIXIN['secret']
         access_token_api = config.WEIXIN['access_token_api']
         access_token_url = '{access_token_api}?appid={appid}&secret={secret}&code={code}&grant_type=authorization_code'.format(
-            access_token_api=access_token_api, appid=appid, secret=secret, code=code)
+                access_token_api=access_token_api, appid=appid, secret=secret, code=code)
 
         http_client = tornado.httpclient.AsyncHTTPClient()
         resp = yield tornado.gen.Task(http_client.fetch, access_token_url, method="GET", validate_cert=False)
@@ -55,7 +56,7 @@ class CallbackHandler(BaseRequestHandler):
 
         user_info_api = config.WEIXIN['user_info_api']
         user_info_url = '{user_info_api}?access_token={access_token}&openid={openid}&lang=zh_CN'.format(
-            user_info_api=user_info_api, access_token=data['access_token'], openid=data['openid'])
+                user_info_api=user_info_api, access_token=data['access_token'], openid=data['openid'])
 
         resp = yield tornado.gen.Task(http_client.fetch, user_info_url, method="GET", validate_cert=False)
         logger.info(u'user info response {}'.format(resp))
@@ -119,3 +120,54 @@ class CallbackHandler(BaseRequestHandler):
             return False, None
         else:
             return True, data
+
+
+@router.Route('/api/v1/weixin/share')
+class ActivityTransformHandler(BaseApiRequestHandler):
+    @tornado.gen.coroutine
+    @tornado.web.asynchronous
+    def get(self):
+        remote_url = self.get_argument("url")
+        appid = config.WEIXIN['appid']
+        secret = config.WEIXIN['secret']
+
+        token_key = "wx:api:access_token"
+        ticket_key = "wx:api:js_ticket"
+
+        if rdb.exists("%s" % token_key):
+            access_token = rdb.get(token_key)
+        else:
+            http_client = tornado.httpclient.AsyncHTTPClient()
+            url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential" \
+                  "&appid={}&secret={}".format(appid, secret)
+
+            resp = yield tornado.gen.Task(http_client.fetch, url, method="GET")
+            try:
+                data = json.loads(resp.body)
+            except Exception, e:
+                logger.error("api.weixin response error: {}".format(e))
+                self.set_status(500)
+                self.finish()
+                return
+
+            access_token = data['access_token']
+            rdb.set(token_key, access_token)
+            rdb.expire(token_key, data['expires_in'])
+
+        if rdb.exists("%s" % ticket_key):
+            js_ticket = self.s_connect.get(ticket_key)
+        else:
+            http_client = tornado.httpclient.AsyncHTTPClient()
+            url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={}&type=jsapi".format(access_token)
+            resp = yield tornado.gen.Task(http_client.fetch, url, method="GET")
+            data = json.loads(resp.body)
+            js_ticket = data['ticket']
+            self.s_connect.set(ticket_key, js_ticket)
+            self.s_connect.expire(ticket_key, data['expires_in'])
+        noncestr = gen_password()
+        timestamp = int(time.time())
+        jsapi_ticket = "jsapi_ticket={}&noncestr={}&timestamp={}&url={}".format(
+                js_ticket, noncestr, timestamp, remote_url)
+        signature = hashlib.sha1(jsapi_ticket).hexdigest()
+        result = dict(timestamp=timestamp, nonceStr=noncestr, signature=signature, appId=appid, url=remote_url)
+        self.finish(json.dumps(result, ensure_ascii=False))
