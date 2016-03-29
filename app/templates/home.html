@@ -71,7 +71,7 @@
   var url = window.location.protocol + '//' + window.location.host + window.location.pathname;
   $.get("/api/v1/weixin/share?url="+ url, function (data) {
     var configObj = {
-      debug: false,
+      debug: true,
       appId: data.appId,
       timestamp: data.timestamp,
       nonceStr: data.nonceStr,
@@ -90,7 +90,7 @@
       // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
       wx.onMenuShareTimeline({
         title: '星座萌宠帮你赚奖品｜我从同道大叔手里抢来一只星座宝宝，你要不要领养看?', // 分享标题
-        link: "http://mp.shushujia.me",
+        link: "http://mp.shushujia.me/home",
         imgUrl: "http://static.shushujia.me/connect/images/a.jpg" // 分享图标
       });
 
@@ -98,7 +98,7 @@
       wx.onMenuShareAppMessage({
         title: '星座萌宠帮你赚奖品', // 分享标题
         desc: "我从同道大叔手里抢来一只星座宝宝，你要不要领养看?", // 分享描述
-        link: "http://mp.shushujia.me",
+        link: "http://mp.shushujia.me/home",
         imgUrl: "http://static.shushujia.me/connect/images/a.jpg", // 分享图标
         type: 'link' // 分享类型,music、video或link，不填默认为link
       });
