@@ -132,6 +132,9 @@ class ActivityTransformHandler(BaseApiRequestHandler):
         appid = config.WEIXIN['appid']
         secret = config.WEIXIN['secret']
 
+        appid = 'wx9572bb8190afae7e'
+        secret = '77021ed53641e3261f074af4ef46794c'
+
         token_key = "wx:api:access_token"
         ticket_key = "wx:api:js_ticket"
 
