@@ -130,6 +130,7 @@ class ActivityTransformHandler(BaseApiRequestHandler):
     def get(self):
         remote_url = self.get_argument("url")
         appid = config.WEIXIN['appid']
+        # appid = 'wx9572bb8190afae7e'
         secret = config.WEIXIN['secret']
 
         token_key = "wx:api:access_token"
