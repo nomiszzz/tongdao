@@ -172,10 +172,11 @@ class ActivityTransformHandler(BaseApiRequestHandler):
                 js_ticket, noncestr, timestamp, remote_url)
         signature = hashlib.sha1(jsapi_ticket).hexdigest()
 
-        logger.info("weixin ticket {}".format(js_ticket))
-        logger.info('{}'.format(noncestr))
-        logger.info('{}'.format(timestamp))
-        logger.info('{}'.format(signature))
+        logger.info("ticket {}".format(js_ticket))
+        logger.info("url: {}".format(remote_url))
+        logger.info('noncestr: {}'.format(noncestr))
+        logger.info('timestamp: {}'.format(timestamp))
+        logger.info('signature: {}'.format(signature))
 
         result = dict(timestamp=timestamp, nonceStr=noncestr, signature=signature, appId=appid, url=remote_url)
         self.finish(json.dumps(result, ensure_ascii=False))
