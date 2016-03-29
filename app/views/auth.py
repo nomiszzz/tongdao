@@ -142,7 +142,7 @@ class ActivityTransformHandler(BaseApiRequestHandler):
             url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential" \
                   "&appid={}&secret={}".format(appid, secret)
 
-            resp = yield tornado.gen.Task(http_client.fetch, url, method="GET")
+            resp = yield tornado.gen.Task(http_client.fetch, url, method="GET", validate_cert=False)
             try:
                 data = json.loads(resp.body)
             except Exception, e:
@@ -160,7 +160,7 @@ class ActivityTransformHandler(BaseApiRequestHandler):
         else:
             http_client = tornado.httpclient.AsyncHTTPClient()
             url = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={}&type=jsapi".format(access_token)
-            resp = yield tornado.gen.Task(http_client.fetch, url, method="GET")
+            resp = yield tornado.gen.Task(http_client.fetch, url, method="GET", validate_cert=False)
             data = json.loads(resp.body)
             js_ticket = data['ticket']
             rdb.set(ticket_key, js_ticket)
